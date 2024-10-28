@@ -1,0 +1,96 @@
+.min-width-max-content{
+  min-width: max-content;
+  width: auto;
+}
+
+.flex-col{
+  display: flex;
+  flex-direction: column;
+}
+
+.mh-vh-30{
+  height: max-content;
+  max-height: 30vh;
+}
+
+/* Modal CSS */
+.modal-title {
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-content {
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Tag Classes */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #ffdddd; /* Light red background for tags */
+  border: 1px solid #ff5c5c; /* Red border */
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+  color: #ff5c5c; /* Red color for the cross */
+  cursor: pointer;
+  margin-right: 5px;
+}
+.select2-container {
+  width: 100% !important;
+}
+
+/* List Tag */
+.list-tag{
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: red;
+  color: white;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 0 1em;
+  font-size: 0.8rem;
+}
+
+/* Issued Book Tab Class */
+.tab-class {
+  color: white;
+  text-transform: capitalize;
+  cursor: pointer;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+}
+.activeTab {
+  border-color: rgb(222, 222, 222);
+}
+
+/* Loader Class */
+.loader-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  z-index: 10000;
+}
+
+.loader-message {
+  margin-top: 10px;
+  font-size: 1.2em;
+  color: var(--white);
+}
+
+.spinner-border{
+  border-right-color: var(--white) !important;
+}
+
+.loader-container.loading ~ * {
+  pointer-events: none;
+}
