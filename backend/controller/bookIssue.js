@@ -1,40 +1,12 @@
 import constant from "../constant/constant.js";
 import BookDetail from "../modal/bookDetail.js";
 import BookIssuance from "../modal/bookIssuance.js";
-import UserRole from "../modal/role.js";
 import SubscriptionType from "../modal/subscriptionType.js";
 import User from "../modal/users.js";
 import UserSubscription from "../modal/usersSubscription.js";
 
 const { RouteCode } = constant;
 
-const getUserRoleList = async (req, res) => {
-    const userID = req.user;
-    try {
-        const foundUser = await User.findById(userID);
-        if (!foundUser) {
-            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Unauthorized access, Try again!' });
-        }
-
-        const hasPermission = true;
-        if(!hasPermission){
-            return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission Denied!' });
-        }
-
-        const foundRoles = await UserRole.find();
-        const roleList = foundRoles?.map(role => {
-            return {
-                id: role._id,
-                name: role.roleName,
-            }
-        })
-
-        return res.status(RouteCode.SUCCESS.statusCode).json(roleList);
-    } catch (err) {
-        console.error(err);
-        return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
-    }
-};
 const getUserList = async (req, res) => {
     const userID = req.user;
     const { userType, userName } = req.params;
@@ -456,6 +428,6 @@ const postReturnBook = async (req, res) => {
 }
 
 export default {
-    getUserRoleList, getUserList, getValidateUserforBookIssuing, postIssueBook,
+    getUserList, getValidateUserforBookIssuing, postIssueBook,
     getIssuedBooks, getPrevIssuedBooks, putAddPayment, postReturnBook
 }

@@ -6,11 +6,6 @@ const studentRoleSchema = new mongoose.Schema({
         ref: 'User', 
         required: true 
     },
-    uniqueID: {
-        type: String,
-        unique: true,
-        required: true,
-    },
     dob: { 
         type: Date, 
         required: true 

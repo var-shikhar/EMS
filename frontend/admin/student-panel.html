@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../img/favicon.png">
+  <title>Student Panel - Education Management System - UTS</title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
+  <!-- Nucleo Icons -->
+  <link href="../css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/custom.css">
+</head>
+
+<body class="g-sidenav-show  bg-gray-100">
+    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2  bg-white my-2" id="sidenav-main">
+        <div class="sidenav-header">
+        <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+        <a class="navbar-brand px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
+            <img src="../img/logo-ct-dark.png" class="navbar-brand-img" width="26" height="26" alt="main_logo">
+            <span class="ms-1 text-sm text-dark">UTS</span>
+        </a>
+        </div>
+        <hr class="horizontal dark mt-0 mb-2">
+        <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+            <a class="nav-link text-dark" href="dashboard.html">
+                <i class="material-symbols-rounded opacity-5">dashboard</i>
+                <span class="nav-link-text ms-1">Dashboard</span>
+            </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link active bg-gradient-dark text-white" href="book-list.html">
+                <i class="material-symbols-rounded opacity-5">book_5</i>
+                <span class="nav-link-text ms-1">Student List</span>
+            </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="report.html">
+                    <i class="material-symbols-rounded opacity-5">report</i>
+                    <span class="nav-link-text ms-1">Report</span>
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+            <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Panel Data</h6>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link text-dark" href="category.html">
+                <i class="material-symbols-rounded opacity-5">category</i>
+                <span class="nav-link-text ms-1">Role List</span>
+            </a>
+            </li>
+        </ul>
+        </div>
+    </aside>
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+        <!-- Navbar -->
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+            <div class="container-fluid py-1 px-3">
+                <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="dashboard.html">Dashboard</a></li>
+                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Student Panel</li>
+                </ol>
+                </nav>
+                <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                <ul class="navbar-nav d-flex align-items-center ms-auto  justify-content-end">
+                    <li class="nav-item d-flex align-items-center">
+                        <div id="logout-link" class="nav-link text-body font-weight-bold px-0 cursor-pointer">
+                            <i class="material-symbols-rounded">account_circle</i>
+                        </div>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+
+        <div class="container-fluid py-2">
+            <div class="d-flex gap-2 justify-content-between my-2">
+                <div class="input-group input-group-outline flex-fill bg-white">
+                    <input type="text" placeholder="Type Student Name / ID to search..." class="form-control" id="search-student">
+                </div>
+                <button class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="add-student-btn">Add New Student</button>
+            </div>
+            <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3 px-3 d-flex gap-2 align-items-center">
+                            <h6 class="tab-class activeTab" id="student-list">Student List</h6>
+                            <h6 class="tab-class" id="pending-list">Pending List</h6>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S.No.</th>
+                                    <th colspan="6" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role Name</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Interact</th>
+                                </tr>
+                            </thead>
+                            <tbody id="role-list"></tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h5 class="modal-title" id="addRoleModalLabel">Add New Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="text" class="form-control border px-2" id="role-name" placeholder="Enter Role name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="save-role-btn">Create New Role</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editRoleModal" tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="text" class="form-control border px-2" id="edit-role-name" placeholder="Enter Role name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="update-role-btn">Update Role</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!--   Core JS Files   -->
+    <script src="../js/core/popper.min.js"></script>
+    <script src="../js/core/bootstrap.min.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/common.js"></script>
+
+    <script type="module">
+        import { getRoleList, postNewRole, updateRole, deleteRole } from '../js/admin/rolePanel.js';
+        document.addEventListener('DOMContentLoaded', async function () {
+            let roleList = [];
+            let filteredList = [];
+    
+            const searchInput = document.getElementById('search-student');
+            const studentFilter = document.getElementById('student-list');
+            const pendingFilter = document.getElementById('pending-list');
+
+
+            const tbody = document.getElementById('role-list');
+    
+            const addRoleBtn = document.getElementById('add-student-btn');
+            const editRoleBtn = document.getElementById('update-role-btn');
+    
+            const addModalBlock = document.getElementById('addRoleModal');
+            const updateModalBlock = document.getElementById('editRoleModal');
+    
+            const addRoleModal = new bootstrap.Modal(addModalBlock, { keyboard: false });
+            const updateRoleModal = new bootstrap.Modal(updateModalBlock, { keyboard: false });
+    
+            const roleNameInput = document.getElementById('role-name');
+            const editRoleNameInput = document.getElementById('edit-role-name');
+    
+            const saveRoleBtn = document.getElementById('save-role-btn');
+            const updateRoleBtn = document.getElementById('update-role-btn');
+    
+            // Event Listener for Search Input
+            searchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+                filteredList = roleList.filter(item => item.name.toLowerCase().includes(searchTerm));
+                renderTable();
+            });
+    
+            // Default Event Listener
+            addRoleBtn.addEventListener('click', () => addRoleModal.show());
+    
+            // Delete Role
+            async function handleRoleDeletion(roleID) {
+                const confirmation = confirm("Are you sure you want to delete this role?");
+                if (confirmation) {
+                    let isDeleted = await deleteRole(roleID);
+                    if (isDeleted) {
+                        alert('Role Deleted Successfully!');
+                        filteredList = filteredList.filter(item => item.id !== roleID);
+                        renderTable();
+                    } else alert('Something went wrong, Try again!');
+                }
+            }
+    
+            // Function to render the table
+            function renderTable() {
+                tbody.innerHTML = '';
+                if (filteredList?.length > 0) {
+                    filteredList.forEach((item, index) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class='ps-4'>${index + 1}</td>
+                            <td colspan="6">
+                                <h6 class="mb-0 text-sm text-truncate">${item.name}</h6>
+                            </td>
+                            <td class="align-middle">
+                                <button class="btn bg-gradient-dark mb-0 py-1 edit-btn" data-id="${item.id}">Edit Role</button>
+                                <button class="btn bg-gradient-dark mb-0 py-1 delete-btn" data-id="${item.id}">Delete Role</button>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="6"><h6 class="mb-0 text-sm text-truncate px-md-4">No Role Found! Create New Role</h6></td>';
+                    tbody.appendChild(row);
+                }
+            }
+    
+            // Event Listener for tbody (delegated)
+            tbody.addEventListener('click', (event) => {
+                if (event.target.classList.contains('delete-btn')) {
+                    const itemId = event.target.getAttribute('data-id');
+                    handleRoleDeletion(itemId);
+                }
+                if (event.target.classList.contains('edit-btn')) {
+                    const itemId = event.target.getAttribute('data-id');
+                    handleEdit(itemId);
+                }
+            });
+    
+            async function fetchAndSetRoleList() {
+                roleList = await getRoleList();
+                filteredList = roleList;
+                renderTable();
+            }
+    
+            // Handle form submission inside the modal
+            saveRoleBtn.addEventListener('click', async (event) => {
+                event.preventDefault();
+    
+                const roleName = roleNameInput.value;
+                if (roleName.trim() === '') {
+                    alert('Role name is required!');
+                    return;
+                }
+    
+                const isSaved = await postNewRole(roleName);
+                if (isSaved) {
+                    alert('Role added successfully!');
+                    addRoleModal.hide();
+                    fetchAndSetRoleList();
+                    roleNameInput.value = '';
+                }
+            });
+    
+            // Handle Role Editing
+            async function handleEdit(roleID) {
+                const roleToEdit = roleList.find(item => item.id === roleID);
+                if (roleToEdit) {
+                    editRoleNameInput.value = roleToEdit.name;
+                    updateRoleModal.show();
+    
+                    updateRoleBtn.onclick = async (event) => {
+                        event.preventDefault();
+    
+                        const updatedRoleName = editRoleNameInput.value;
+    
+                        if (updatedRoleName.trim() === '') {
+                            alert('Role name is required!');
+                            return;
+                        }
+    
+                        const isUpdated = await updateRole(roleID, updatedRoleName);
+                        if (isUpdated) {
+                            alert('Role updated successfully!');
+                            updateRoleModal.hide();
+                            editRoleNameInput.value = '';
+                            fetchAndSetRoleList();
+                        }
+                    };
+                }
+            }
+    
+            // Initial fetch
+            await fetchAndSetRoleList();
+        });
+    </script>
+    
+    <script>
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+        var options = {
+            damping: '0.5'
+        }
+        Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+</body>
+
+</html>
