@@ -44,10 +44,7 @@ const studentRoleSchema = new mongoose.Schema({
             ref: 'AcademicSection', 
             required: true 
         },
-        academicYear: { 
-            type: String, 
-            required: true 
-        }
+        academicYear: { type: String }
     }]
 }, { timestamps: true });
   

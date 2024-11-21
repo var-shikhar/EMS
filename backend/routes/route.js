@@ -50,8 +50,19 @@ router.route('/admin/dashboard/analytics').get(isAuth, reportController.getDashb
 
 
 // Admin Routes
-router.route('/admin/roles/:roleID?').get(isAuth, roleController.getUserRoleList).post(isAuth, roleController.postRole).put(isAuth, roleController.putRoleDetails).delete(isAuth, roleController.deleteRole);
+import adClassPanelController from '../controller/admin/classPanel.js';
+import adSectionPanelController from '../controller/admin/sectionPanel.js';
+import adStudentPanelController from '../controller/admin/studentPanel.js';
+import adGenderPanelController from '../controller/admin/genderPanel.js';
 
+
+router.route('/admin/roles/:roleID?').get(isAuth, roleController.getUserRoleList).post(isAuth, roleController.postRole).put(isAuth, roleController.putRoleDetails).delete(isAuth, roleController.deleteRole);
+router.route('/admin/student-panel').get(isAuth, adStudentPanelController.getStudentList).post(isAuth, adStudentPanelController.postNewStudent)
+router.route('/admin/student-panel/:studentID?')
+
+router.route('/admin/class-panel').get(isAuth, adClassPanelController.getAcademicClassList)
+router.route('/admin/section-panel').get(isAuth, adSectionPanelController.getAcademicSectionList)
+router.route('/admin/gender-panel').get(isAuth, adGenderPanelController.getGenderList)
 
 
 router.use('/', async (req, res) => {

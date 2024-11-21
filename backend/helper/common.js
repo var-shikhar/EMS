@@ -5,6 +5,11 @@ function getNameAbbreviation(name) {
     return initials.join('');
 }
 
+const generateUniqueID = () => {
+    return Math.floor(100000 + Math.random() * 900000);
+  };
+  
 export default {
-    getNameAbbreviation
+    getNameAbbreviation,
+    generateUniqueID
 }

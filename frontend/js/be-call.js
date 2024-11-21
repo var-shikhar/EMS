@@ -19,7 +19,7 @@ export async function postLogin(formData) {
             document.cookie = `authToken=${token}; path=/; expires=${expirationDate.toUTCString()};`;
 
             setTimeout(() => {
-                window.location.href = "dashboard.html";
+                window.location.href = "../admin/dashboard.html";
             }, 2000);
         }
 

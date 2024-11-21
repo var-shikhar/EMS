@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://localhost:8080';
+const BE_URL = 'http://localhost:8080';
 
 function loginCheckup() {
     const token = sessionStorage.getItem("authToken");
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     logoutLink.addEventListener("click", async function(event) {
         event.preventDefault();
         const token = sessionStorage.getItem("authToken");        
-        const response = await fetch(`${BACKEND_URL}/auth/logout`, {
+        const response = await fetch(`${BE_URL}/auth/logout`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -39,10 +39,28 @@
             </a>
             </li>
             <li class="nav-item">
-            <a class="nav-link active bg-gradient-dark text-white" href="book-list.html">
-                <i class="material-symbols-rounded opacity-5">book_5</i>
+            <a class="nav-link active bg-gradient-dark text-white" href="student-panel.html">
+                <i class="material-symbols-rounded opacity-5">perm_contact_calendar</i>
                 <span class="nav-link-text ms-1">Student List</span>
             </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="educator-panel.html">
+                    <i class="material-symbols-rounded opacity-5">shield_person</i>
+                    <span class="nav-link-text ms-1">Educators List</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="academic-staff.html">
+                    <i class="material-symbols-rounded opacity-5">diversity_3</i>
+                    <span class="nav-link-text ms-1">Academic Staff List</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="other-user-panel.html">
+                    <i class="material-symbols-rounded opacity-5">settings_accessibility</i>
+                    <span class="nav-link-text ms-1">Other Users</span>
+                </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" href="report.html">
@@ -54,7 +72,7 @@
             <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Panel Data</h6>
             </li>
             <li class="nav-item">
-            <a class="nav-link text-dark" href="category.html">
+            <a class="nav-link text-dark" href="role-panel.html">
                 <i class="material-symbols-rounded opacity-5">category</i>
                 <span class="nav-link-text ms-1">Role List</span>
             </a>
@@ -97,22 +115,24 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3 px-3 d-flex gap-2 align-items-center">
-                            <h6 class="tab-class activeTab" id="student-list">Student List</h6>
-                            <h6 class="tab-class" id="pending-list">Pending List</h6>
+                            <h6 class="tab-class activeTab">Student List</h6>
                         </div>
                     </div>
                     <div class="card-body px-0 pb-2">
-                        <div class="table-responsive p-0">
-                        <table class="table align-items-center mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S.No.</th>
-                                    <th colspan="6" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role Name</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Interact</th>
-                                </tr>
-                            </thead>
-                            <tbody id="role-list"></tbody>
-                        </table>
+                       <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S.No.</th>
+                                        <th colspan="4" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Student Name & ID</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">Admission ID & Date</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">Current Class</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">Status</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">Interact</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="student_table_body"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -121,195 +141,518 @@
         </div>
     </main>
 
-    <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addStudentModal" tabindex="-1" role="dialog" aria-labelledby="addStudentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header py-2">
-                    <h5 class="modal-title" id="addRoleModalLabel">Add New Role</h5>
+                    <h5 class="modal-title" id="addStudentModalLabel">Add New Student</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <input type="text" class="form-control border px-2" id="role-name" placeholder="Enter Role name" required>
-                    </div>
+                    <form id="create-student-form" class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="firstName" class="form-label fw-bold">First Name</label>
+                            <input type="text" class="form-control border px-2" id="firstName" placeholder="John" required>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="lastName" class="form-label fw-bold">Last Name</label>
+                            <input type="text" class="form-control border px-2" id="lastName" placeholder="Doe" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="displayName" class="form-label fw-bold">Display Name</label>
+                            <input type="text" class="form-control border px-2" id="displayName" placeholder="john_doe" required autocomplete="off">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="gender" class="form-label fw-bold">Select Gender</label>
+                            <select class="form-control border px-2" id="gender" required></select>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="dob" class="form-label fw-bold">Enter DOB</label>
+                            <input type="date" class="form-control border px-2" id="dob" required autocomplete="off">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="admissionNo" class="form-label fw-bold">Admision No</label>
+                            <input type="text" class="form-control border px-2" id="admissionNo" required autocomplete="off">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="admissionDate" class="form-label fw-bold">Admision Date</label>
+                            <input type="date" class="form-control border px-2" id="admissionDate" required autocomplete="off">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="currentClass" class="form-label fw-bold">Select Class</label>
+                            <select class="form-control border px-2" id="currentClass" required autocomplete="off"></select>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="currentSection" class="form-label fw-bold">Select Section</label>
+                            <select class="form-control border px-2" id="currentSection" required autocomplete="off"></select>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="password" class="form-label fw-bold">Login Password</label>
+                            <input type="password" class="form-control border px-2" id="password" placeholder="*****" required>
+                        </div>
+                        <small class="text-danger" id="create_student_form-error"></small>
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="save-role-btn">Create New Role</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="editRoleModal" tabindex="-1" role="dialog" aria-labelledby="editRoleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header py-2">
-                    <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <input type="text" class="form-control border px-2" id="edit-role-name" placeholder="Enter Role name" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="update-role-btn">Update Role</button>
+                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" id="addModalCloseBtn">Close</button>
+                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="create-student-btn">Add New Student</button>
                 </div>
             </div>
         </div>
     </div>
     
+    <div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h5 class="modal-title" id="editStudentModalLabel">Update Student Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-student-form" class="row">
+                        <input type="hidden" name="studentID" id="studentID" />
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="edFirstName" class="form-label fw-bold">First Name</label>
+                            <input type="text" class="form-control border px-2" id="edFirstName" placeholder="John" required>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="edLastName" class="form-label fw-bold">Last Name</label>
+                            <input type="text" class="form-control border px-2" id="edLastName" placeholder="Doe" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="edDisplayName" class="form-label fw-bold">Display Name</label>
+                            <input type="text" class="form-control border px-2" id="edDisplayName" placeholder="john_doe" required autocomplete="off">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="edGender" class="form-label fw-bold">Select Gender</label>
+                            <select class="form-control border px-2" id="edGender" required></select>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="edDob" class="form-label fw-bold">Enter DOB</label>
+                            <input type="date" class="form-control border px-2" id="edDob" required autocomplete="off">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="edAdmissionNo" class="form-label fw-bold">Admision No</label>
+                            <input type="text" class="form-control border px-2" id="edAdmissionNo" required autocomplete="off">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="edAdmissionDate" class="form-label fw-bold">Admision Date</label>
+                            <input type="date" class="form-control border px-2" id="edAdmissionDate" required autocomplete="off">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="edCurrentClass" class="form-label fw-bold">Select Class</label>
+                            <select class="form-control border px-2" id="edCurrentClass" required autocomplete="off"></select>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="edCurrentSection" class="form-label fw-bold">Select Section</label>
+                            <select class="form-control border px-2" id="edCurrentSection" required autocomplete="off"></select>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="edPassword" class="form-label fw-bold">Login Password</label>
+                            <input type="password" class="form-control border px-2" id="edPassword" placeholder="*****" required>
+                        </div>
+                        <small class="text-danger" id="edit_student_form-error"></small>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="update_student_details-btn">Update Student Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!--   Core JS Files   -->
     <script src="../js/core/popper.min.js"></script>
     <script src="../js/core/bootstrap.min.js"></script>
     <script src="../js/common.js"></script>
-    <script src="../js/common.js"></script>
-
     <script type="module">
-        import { getRoleList, postNewRole, updateRole, deleteRole } from '../js/admin/rolePanel.js';
+        import { postNewStudent, putStudentDetails, updateStatus, deleteStudent, getClassandSectionList, getStudentList } from '../js/admin/studentPanel.js';
         document.addEventListener('DOMContentLoaded', async function () {
-            let roleList = [];
+            let studentList = [];
             let filteredList = [];
+            let classList = [];
+            let sectionList = [];
+            let filteredSectionList = [];
+            let genderList = [];
+
+            handleInitialFetching()
     
             const searchInput = document.getElementById('search-student');
-            const studentFilter = document.getElementById('student-list');
-            const pendingFilter = document.getElementById('pending-list');
+            const addStudentBtn = document.getElementById('add-student-btn');
+            const studentTableBody = document.getElementById('student_table_body'); 
 
+            const addStudentModal = document.getElementById('addStudentModal');
+            const addModalCloseBtn = document.getElementById('addModalCloseBtn');
+            const addStudentModalTrigger = new bootstrap.Modal(addStudentModal, { keyboard: false });
+            
+            const addStudentForm = document.getElementById('create-student-form');
+            const firstNameInput = document.getElementById('firstName');
+            const lastNameInput = document.getElementById('lastName');
+            const displayNameInput = document.getElementById('displayName');
+            const genderInput = document.getElementById('gender');
+            const currentSectionInput = document.getElementById('currentSection');
+            const currentClassInput = document.getElementById('currentClass');
+            const admissionDateInput = document.getElementById('admissionDate');
+            const admissionNoInput = document.getElementById('admissionNo');
+            const dobInput = document.getElementById('dob');           
+            const passwordInput = document.getElementById('password');
+            const addStudentFormError = document.getElementById('create_student_form-error')
 
-            const tbody = document.getElementById('role-list');
-    
-            const addRoleBtn = document.getElementById('add-student-btn');
-            const editRoleBtn = document.getElementById('update-role-btn');
-    
-            const addModalBlock = document.getElementById('addRoleModal');
-            const updateModalBlock = document.getElementById('editRoleModal');
-    
-            const addRoleModal = new bootstrap.Modal(addModalBlock, { keyboard: false });
-            const updateRoleModal = new bootstrap.Modal(updateModalBlock, { keyboard: false });
-    
-            const roleNameInput = document.getElementById('role-name');
-            const editRoleNameInput = document.getElementById('edit-role-name');
-    
-            const saveRoleBtn = document.getElementById('save-role-btn');
-            const updateRoleBtn = document.getElementById('update-role-btn');
-    
+            const createStudentBtn = document.getElementById('create-student-btn');
+            let createStudentBtnValidation = {
+                firstName: true,
+                lastName: true,
+                displayName: true,
+                gender: true,
+                password: true,
+                currSection: true,
+                currClass: true,
+                addDate: true,
+                addNo: true,
+                dob: true
+            }
+
+            const editStudentModal = document.getElementById('editStudentModal');
+            const editStudentModalTrigger = new bootstrap.Modal(addStudentModal, { keyboard: false });
+            
+            const edStudentIDInput = document.getElementById('studentID');
+            const edFirstNameInput = document.getElementById('edFirstName');
+            const edLastNameInput = document.getElementById('edLastName');
+            const edDisplayNameInput = document.getElementById('edDisplayName');
+            const edGenderInput = document.getElementById('edGender');
+            const edDOBInput = document.getElementById('edDob');
+            const edAdmissionNoInput = document.getElementById('edAdmissionNo');
+            const edAdmissionDateInput = document.getElementById('edAdmissionDate');
+            const edCurrClassInput = document.getElementById('edCurrentClass');
+            const edCurrSectionInput = document.getElementById('edCurrentSection');
+            const edPasswordInput = document.getElementById('edPassword');
+            const editStudentFormError = document.getElementById('edit_student_form-error')
+
+            const updateDetailsBtn = document.getElementById('update_student_details-btn');
+            let updateFormValidation = {
+                firstName: true,
+                lastName: true,
+                displayName: true,
+                gender: true,
+                dob: true,
+                admissionNo: true,
+                admissionDate: true,
+                currClass: true,
+                currSection: true,
+                password: true,
+            }
+
+            handleInitialValues();
             // Event Listener for Search Input
             searchInput.addEventListener('input', (event) => {
                 const searchTerm = event.target.value.toLowerCase();
-                filteredList = roleList.filter(item => item.name.toLowerCase().includes(searchTerm));
-                renderTable();
+                filteredList = studentList.filter(item => 
+                    item.firstName.toLowerCase().includes(searchTerm) || 
+                    item.lastName.toLowerCase().includes(searchTerm) ||
+                    item.displayName.toLowerCase().includes(searchTerm) ||
+                    item.uniqueID.toLowerCase().includes(searchTerm)
+                );
+                handleRederTable();
             });
     
-            // Default Event Listener
-            addRoleBtn.addEventListener('click', () => addRoleModal.show());
-    
-            // Delete Role
-            async function handleRoleDeletion(roleID) {
-                const confirmation = confirm("Are you sure you want to delete this role?");
+
+            addStudentBtn.addEventListener('click', () => {
+                addStudentModalTrigger.show();
+                handleFormOptions(currentSectionInput, currentClassInput, genderInput);
+            });
+            addModalCloseBtn.addEventListener('click', () => addStudentModalTrigger.hide())
+
+            firstNameInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, firstNameInput, createStudentBtn, 'First Name', createStudentBtnValidation, 'firstName', true, false));
+            lastNameInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, lastNameInput, createStudentBtn, 'Last Name', createStudentBtnValidation, 'lastName', true, false));
+            displayNameInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, displayNameInput, createStudentBtn, 'Display Name', createStudentBtnValidation, 'displayName', true, false));
+            genderInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, genderInput, createStudentBtn, 'Gender', createStudentBtnValidation, 'gender', false, false));
+            passwordInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, passwordInput, createStudentBtn, 'Profile Password', createStudentBtnValidation, 'password', true, true));
+            currentSectionInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, currentSectionInput, createStudentBtn, 'Current Section', createStudentBtnValidation, 'currSection', false, false));
+            currentClassInput.addEventListener('input', (e) => {
+                handleFormValidation(e.target.value, addStudentFormError, currentClassInput, createStudentBtn, 'Current Class', createStudentBtnValidation, 'currClass', false, false);
+                handleFilteredSection(e.target.value, currentSectionInput, currentClassInput, genderInput);
+            });
+            admissionDateInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, admissionDateInput, createStudentBtn, 'Admission Date', createStudentBtnValidation, 'addDate', false, false));
+            admissionNoInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, admissionNoInput, createStudentBtn, 'Admission No', createStudentBtnValidation, 'addNo', true, false));
+            dobInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, dobInput, createStudentBtn, 'DOB', createStudentBtnValidation, 'dob', true, false));
+
+
+            createStudentBtn.addEventListener('click', async function(e){
+                e.preventDefault();
+
+                const formData = {
+                    firstNameValue: firstNameInput.value.trim(),
+                    lastNameValue: lastNameInput.value.trim(),
+                    displayNameValue: displayNameInput.value.trim(),
+                    genderValue: genderInput.value.trim(),
+                    passwordValue: passwordInput.value.trim(),
+                    currentSectionValue: currentSectionInput.value.trim(),
+                    currentClassValue: currentClassInput.value.trim(),
+                    admissionDateValue: admissionDateInput.value.trim(),
+                    admissionNoValue: admissionNoInput.value.trim(),
+                    dobValue: dobInput.value.trim(),
+                }
+
+                const isSubmitted = await postNewStudent(formData);
+                if(isSubmitted){
+                    alert('Student Profile has created succesfully!');
+                    addStudentModalTrigger.hide()
+                }             
+            });
+
+            edFirstNameInput.addEventListener('input', (e) => handleFormValidation(e.target.value, editStudentFormError, edFirstNameInput, updateDetailsBtn, 'First Name', updateFormValidation, 'firstName', true, false));
+            edLastNameInput.addEventListener('input', (e) => handleFormValidation(e.target.value, editStudentFormError, edLastNameInput, updateDetailsBtn, 'Last Name', updateFormValidation, 'lastName', true, false));
+            edDisplayNameInput.addEventListener('input', (e) => handleFormValidation(e.target.value, editStudentFormError, edDisplayNameInput, updateDetailsBtn, 'Display Name', updateFormValidation, 'displayName', true, false));
+            edGenderInput.addEventListener('input', (e) => handleFormValidation(e.target.value, editStudentFormError, edGenderInput, updateDetailsBtn, 'Gender', updateFormValidation, 'gender', false, false));
+            edPasswordInput.addEventListener('input', (e) => handleFormValidation(e.target.value, editStudentFormError, edPasswordInput, updateDetailsBtn, 'Profile Password', updateFormValidation, 'password', true, true));
+            edCurrSectionInput.addEventListener('input', (e) => handleFormValidation(e.target.value, editStudentFormError, edCurrSectionInput, updateDetailsBtn, 'Current Section', updateFormValidation, 'currSection', false, false));
+            edCurrClassInput.addEventListener('input', (e) => {
+                handleFormValidation(e.target.value, editStudentFormError, edCurrClassInput, updateDetailsBtn, 'Current Class', updateFormValidation, 'currClass', false, false);
+                handleFilteredSection(e.target.value, edCurrSectionInput, edCurrClassInput, edGenderInput);
+            });
+            edAdmissionDateInput.addEventListener('input', (e) => handleFormValidation(e.target.value, editStudentFormError, edAdmissionDateInput, updateDetailsBtn, 'Admission Date', updateFormValidation, 'admissionDate', false, false));
+            edAdmissionNoInput.addEventListener('input', (e) => handleFormValidation(e.target.value, editStudentFormError, edAdmissionNoInput, updateDetailsBtn, 'Admission No', updateFormValidation, 'admissionNo', true, false));
+            edDOBInput.addEventListener('input', (e) => handleFormValidation(e.target.value, editStudentFormError, edDOBInput, updateDetailsBtn, 'DOB', updateFormValidation, 'dob', true, false));
+
+            // Function to render the table
+            function handleRederTable() {
+                studentTableBody.innerHTML = '';
+                filteredList?.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class='ps-4'>${index + 1}</td>
+                        <td colspan="4">
+                            <h6 class="mb-0 text-sm text-truncate">${item.firstName} ${item.lastName}</h6>
+                            <span class='text-xs bg-gradient-dark text-white rounded p-2 py-1'>${item.uniqueCode}</span>
+                        </td>
+                        <td class="text-center">
+                            <h6 class="mb-0 text-sm text-truncate">${item.admissionNo}</h6>
+                            <span class='text-xs bg-gradient-dark text-white rounded p-2 py-1'>${item.admissionDate ? new Date(item.admissionDate).toLocaleDateString('en-GB') : '-'}</span>
+                        </td>
+                        <td><h6 class="ps-3 mb-0 text-sm text-center">${item.currentClassName} (${item.currentSectionName})</h6></td>
+                        <td><h6 class="ps-3 mb-0 text-sm text-center">${item.isActive ? 'Active' : 'In-Active'}</h6></td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2 align-items-center">
+                                <button class="btn bg-gradient-dark mb-0 py-1 activityBtn" data-id="${item.id}" data-current-status="${item.isActive}">${item.isActive ? 'De-Activate Student' : 'Activate Student'}</button>
+                                <button class="btn bg-gradient-dark mb-0 py-1 editBtn" data-id="${item.id}">Edit Profile</button>
+                                <button class="btn bg-gradient-dark mb-0 py-1 deleteBtn" data-id="${item.id}">Delete Student</button>
+                            </div>
+                        </td>
+                    `;
+                    studentTableBody.appendChild(row);
+                });
+
+                studentTableBody.addEventListener('click', (event) => {
+                    const itemId = event.target.getAttribute('data-id');
+                    if (event.target.classList.contains('editBtn')) handleProfileEdit(itemId);
+                    if (event.target.classList.contains('activityBtn')) {
+                        const currentStatus = event.target.getAttribute('data-current-status');
+                        handleStatusUpdate(itemId, !currentStatus);
+                    }
+                    if (event.target.classList.contains('deleteBtn')) handleDeletion(itemId);
+                });
+            }
+
+            // Handle Initial Data Fetch 
+            async function handleInitialFetching(){
+                studentList = await getStudentList();
+                filteredList = studentList;
+                handleRederTable()
+            }
+
+            function handleFilteredSection(selectedClassID, secElement, classElement, genderElement){
+                filteredSectionList = sectionList.filter(item => item.classID.toString() === selectedClassID.toString());
+                handleFormOptions(secElement, classElement, genderElement, true)
+            }
+
+            async function handleFormOptions(secElement, classElement, genderElement, renderSectionOnly = false) {
+                if(classList?.length <= 0 || sectionList?.length <= 0 || genderList?.length <= 0){
+                    const { classes, sections, genders } = await getClassandSectionList();
+                    classList = classes;
+                    sectionList = sections;
+                    filteredSectionList = sectionList;
+                    genderList = genders;
+                }
+
+                secElement.innerHTML = '';
+
+                const defaultOptionSec = document.createElement('option');
+                defaultOptionSec.value = '';
+                defaultOptionSec.textContent = 'Select ...';
+                defaultOptionSec.disabled = true;
+                defaultOptionSec.selected = true;
+
+                secElement.appendChild(defaultOptionSec);
+                filteredSectionList.forEach(section => {
+                    const option = document.createElement('option');
+                    option.value = section.id;
+                    option.textContent = section.secCode;
+                    secElement.appendChild(option);
+                });
+
+                if(!renderSectionOnly){                    
+                    classElement.innerHTML = '';
+                    genderElement.innerHTML = '';
+
+                    const defaultOptionGender = document.createElement('option');
+                    defaultOptionGender.value = '';
+                    defaultOptionGender.textContent = 'Select ...';
+                    defaultOptionGender.disabled = true;
+                    defaultOptionGender.selected = true;
+
+                    const defaultOptionClass = document.createElement('option');
+                    defaultOptionClass.value = '';
+                    defaultOptionClass.textContent = 'Select ...';
+                    defaultOptionClass.disabled = true;
+                    defaultOptionClass.selected = true;
+
+                    classElement.appendChild(defaultOptionClass);
+                    genderElement.appendChild(defaultOptionGender);
+
+                    classList.forEach(cls => {
+                        const option = document.createElement('option');
+                        option.value = cls.id;
+                        option.textContent = cls.name;
+                        classElement.appendChild(option);
+                    });
+
+                    genderList.forEach(cls => {
+                        const option = document.createElement('option');
+                        option.value = cls.id;
+                        option.textContent = cls.name;
+                        genderElement.appendChild(option);
+                    });
+                }
+            }
+
+            // Handle Initial Page Values 
+            function handleInitialValues(){
+                firstNameInput.value = '';
+                lastNameInput.value = '';
+                displayNameInput.value = '';
+                genderInput.value = '';
+                passwordInput.value = '';
+                currentSectionInput.value = '';
+                currentClassInput.value = '';
+                admissionDateInput.value = '';
+                admissionNoInput.value = '';
+                dobInput.value = '';
+                
+                dobInput.setAttribute('max', new Date().toISOString().split('T')[0]);
+                admissionDateInput.setAttribute('max', new Date().toISOString().split('T')[0]);
+                createStudentBtn.disabled = true;
+
+                edDOBInput.setAttribute('max', new Date().toISOString().split('T')[0]);
+                edAdmissionDateInput.setAttribute('max', new Date().toISOString().split('T')[0]);
+            }
+
+            // Handle Student Deletion
+            async function handleDeletion(studentID) {
+                const confirmation = confirm("Are you sure you want to delete this student?");
                 if (confirmation) {
-                    let isDeleted = await deleteRole(roleID);
+                    let isDeleted = await deleteStudent(studentID);
                     if (isDeleted) {
-                        alert('Role Deleted Successfully!');
-                        filteredList = filteredList.filter(item => item.id !== roleID);
-                        renderTable();
+                        alert('Student has deleted successfully!');
+                        studentList = studentList.filter(item => item.id !== studentID);
+                        filteredList = studentList;
+                        handleRederTable();
                     } else alert('Something went wrong, Try again!');
                 }
             }
-    
-            // Function to render the table
-            function renderTable() {
-                tbody.innerHTML = '';
-                if (filteredList?.length > 0) {
-                    filteredList.forEach((item, index) => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td class='ps-4'>${index + 1}</td>
-                            <td colspan="6">
-                                <h6 class="mb-0 text-sm text-truncate">${item.name}</h6>
-                            </td>
-                            <td class="align-middle">
-                                <button class="btn bg-gradient-dark mb-0 py-1 edit-btn" data-id="${item.id}">Edit Role</button>
-                                <button class="btn bg-gradient-dark mb-0 py-1 delete-btn" data-id="${item.id}">Delete Role</button>
-                            </td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                } else {
-                    const row = document.createElement('tr');
-                    row.innerHTML = '<td colspan="6"><h6 class="mb-0 text-sm text-truncate px-md-4">No Role Found! Create New Role</h6></td>';
-                    tbody.appendChild(row);
+
+            // Handle Student Status Update
+            async function handleStatusUpdate(studentID, value) {
+                const confirmation = confirm(`Are you sure you want to ${value ? 'Activate' : 'DeActivate'} this student Profile?`);
+                if (confirmation) {
+                    let isDeleted = await updateStatus(studentID, value);
+                    if (isDeleted) {
+                        alert(`Student has  ${value ? 'Activated' : 'DeActivated'} successfully!`);
+                        handleInitialFetching();
+                    } else alert('Something went wrong, Try again!');
                 }
             }
-    
-            // Event Listener for tbody (delegated)
-            tbody.addEventListener('click', (event) => {
-                if (event.target.classList.contains('delete-btn')) {
-                    const itemId = event.target.getAttribute('data-id');
-                    handleRoleDeletion(itemId);
-                }
-                if (event.target.classList.contains('edit-btn')) {
-                    const itemId = event.target.getAttribute('data-id');
-                    handleEdit(itemId);
-                }
-            });
-    
-            async function fetchAndSetRoleList() {
-                roleList = await getRoleList();
-                filteredList = roleList;
-                renderTable();
-            }
-    
-            // Handle form submission inside the modal
-            saveRoleBtn.addEventListener('click', async (event) => {
-                event.preventDefault();
-    
-                const roleName = roleNameInput.value;
-                if (roleName.trim() === '') {
-                    alert('Role name is required!');
-                    return;
-                }
-    
-                const isSaved = await postNewRole(roleName);
-                if (isSaved) {
-                    alert('Role added successfully!');
-                    addRoleModal.hide();
-                    fetchAndSetRoleList();
-                    roleNameInput.value = '';
-                }
-            });
-    
-            // Handle Role Editing
-            async function handleEdit(roleID) {
-                const roleToEdit = roleList.find(item => item.id === roleID);
-                if (roleToEdit) {
-                    editRoleNameInput.value = roleToEdit.name;
-                    updateRoleModal.show();
-    
-                    updateRoleBtn.onclick = async (event) => {
-                        event.preventDefault();
-    
-                        const updatedRoleName = editRoleNameInput.value;
-    
-                        if (updatedRoleName.trim() === '') {
-                            alert('Role name is required!');
-                            return;
+
+            // Handle Student Profile Editing
+            async function handleProfileEdit(itemId) {
+                const profileToEdit = studentList.find(item => item.id === itemId);
+                if (profileToEdit) {
+                    edStudentIDInput.value = itemId;
+                    edFirstNameInput.value = profileToEdit.firstName;
+                    edLastNameInput.value = profileToEdit.lastName;
+                    edDisplayNameInput.value = profileToEdit.displayName;
+                    edGenderInput.value = profileToEdit.gender;
+                    edDOBInput.value = profileToEdit.dob;
+                    edAdmissionNoInput.value = profileToEdit.admissionNo;
+                    edAdmissionDateInput.value = profileToEdit.admissionDate ? new Date(profileToEdit.admissionDate).toISOString().split('T')[0] : '';
+                    edCurrClassInput.value = profileToEdit.currentClass;
+                    edCurrSectionInput.value = profileToEdit.currentSection;
+                    
+
+                    editStudentModalTrigger.show();
+                    handleFormOptions(edCurrSectionInput, edCurrClassInput, edGenderInput);
+
+                    updateDetailsBtn.onclick = async (event) => {
+                        event.preventDefault(); 
+
+                        const formData = {
+                            studentID: edStudentIDInput.value,
+                            firstNameValue: edFirstNameInput.value.trim(),
+                            lastNameValue: edLastNameInput.value.trim(),
+                            displayNameValue: edDisplayNameInput.value.trim(),
+                            genderValue: edGenderInput.value.trim(),
+                            passwordValue: edPasswordInput.value.trim(),
+                            currentSectionValue: edCurrSectionInput.value.trim(),
+                            currentClassValue: edCurrClassInput.value.trim(),
+                            admissionDateValue: edAdmissionDateInput.value.trim(),
+                            admissionNoValue: edAdmissionNoInput.value.trim(),
+                            dobValue: edDOBInput.value.trim(),
                         }
-    
-                        const isUpdated = await updateRole(roleID, updatedRoleName);
+
+                        const isUpdated = await putStudentDetails(formData);
                         if (isUpdated) {
-                            alert('Role updated successfully!');
-                            updateRoleModal.hide();
-                            editRoleNameInput.value = '';
-                            fetchAndSetRoleList();
+                            alert('Profile has updated successfully!');
+                            editStudentModalTrigger.hide();
+                            handleInitialFetching()
                         }
                     };
                 }
             }
-    
-            // Initial fetch
-            await fetchAndSetRoleList();
+
+            // Handle Common Form Validation
+            function handleFormValidation(value, errorElement, inputElement, submitBtn, errorTitle, validationObj, validationKey, hasLengthCheck = false, hasPasswordCheck = false) {
+                const passwordREGEX = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+                if (value.trim() === '') {
+                    errorElement.innerHTML = `${errorTitle} is required!`;
+                    inputElement.classList.add('error-form-input');
+                    validationObj[validationKey] = true;
+                    submitBtn.disabled = true;
+                    return;
+                }
+
+                if (hasLengthCheck && value.trim().length <= 3) {
+                    errorElement.innerHTML = `Minimum 3 Characters are required for ${errorTitle}!`;
+                    inputElement.classList.add('error-form-input');
+                    validationObj[validationKey] = true;
+                    submitBtn.disabled = true;
+                    return;
+                }
+
+                if (hasPasswordCheck && !passwordREGEX.test(value)) {
+                    errorElement.innerHTML = `${errorTitle} must be at least 8 characters long, including an uppercase, a lowercase, a number, and a special character!`;
+                    inputElement.classList.add('error-form-input');
+                    validationObj[validationKey] = true;
+                    submitBtn.disabled = true;
+                    return;
+                }
+
+                errorElement.innerHTML = '';
+                inputElement.classList.remove('error-form-input');
+                validationObj[validationKey] = false;
+                submitBtn.disabled = Object.values(validationObj).some(validation => validation);
+            }
+
         });
     </script>
     
