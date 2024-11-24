@@ -48,8 +48,6 @@ const getUserPanelDashboard = async (req, res) => {
             }, [])
         }
 
-    
-        console.log(foundOBJ);
         return res.status(RouteCode.SUCCESS.statusCode).json(foundOBJ);
     } catch (err) {
         console.error(err);

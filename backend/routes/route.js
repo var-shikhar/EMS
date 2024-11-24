@@ -53,7 +53,7 @@ router.route('/admin/dashboard/analytics').get(isAuth, reportController.getDashb
 import adClassPanelController from '../controller/admin/classPanel.js';
 import adSectionPanelController from '../controller/admin/sectionPanel.js';
 import adStudentPanelController from '../controller/admin/studentPanel.js';
-import adGenderPanelController from '../controller/admin/genderPanel.js';
+import adGenderPanelController from '../controller/masters/genderPanel.js';
 import adDepartmentPanelController from '../controller/admin/departmentPanel.js';
 import adDegreePanelController from '../controller/admin/degreePanel.js';
 import adEducatorPanelController from '../controller/admin/educatorPanel.js';
@@ -76,10 +76,14 @@ router.route('/admin/other-user-panel/:otherUserID').put(isAuth, adOtherUserPane
 router.route('/admin/custom-role-list/:listType').get(isAuth, roleController.getRoleListForEducatorPanel)
 router.route('/admin/dashboard-data/user-panel').get(isAuth, adCommonDashboardController.getUserPanelDashboard)
 
+import masterSubjectController from '../controller/masters/subject.js';
+
+router.route('/admin/subject-panel/:subjectID?').get(isAuth, masterSubjectController.getSubjectList).post(isAuth, masterSubjectController.postSubject).put(isAuth, masterSubjectController.putSubjectDetails).delete(isAuth, masterSubjectController.deleteSubject);
+router.route('/admin/gender-panel/:genderID?').get(isAuth, adGenderPanelController.getGenderList).post(isAuth, adGenderPanelController.postGender).put(isAuth, adGenderPanelController.putGenderDetails).delete(isAuth, adGenderPanelController.deleteGender);
+
 
 router.route('/admin/class-panel').get(isAuth, adClassPanelController.getAcademicClassList)
 router.route('/admin/section-panel').get(isAuth, adSectionPanelController.getAcademicSectionList)
-router.route('/admin/gender-panel').get(isAuth, adGenderPanelController.getGenderList)
 router.route('/admin/department-panel').get(isAuth, adDepartmentPanelController.getDepartmentList)
 router.route('/admin/degree-panel').get(isAuth, adDegreePanelController.getDegreeList)
 
