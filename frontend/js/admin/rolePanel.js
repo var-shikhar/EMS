@@ -10,9 +10,9 @@ export async function getRoleList() {
         throw err;
     }
 }
-export async function postNewRole(roleName) {
+export async function postNewRole(formData) {
     try {
-        const reqData = JSON.stringify({ name: roleName });
+        const reqData = JSON.stringify(formData);
         const { data, isValid, message } = await handlePOSTAXIORequest(`${Config.BACKEND_URL}/admin/roles`, reqData, 'POST');
         if(!isValid) alert(message)
         return data;
@@ -21,12 +21,9 @@ export async function postNewRole(roleName) {
         throw err;
     }
 }
-export async function updateRole(roleID, roleName) {
+export async function updateRole(formData) {
     try {
-        const reqData = JSON.stringify({
-            id: roleID,
-            name: roleName
-        });
+        const reqData = JSON.stringify(formData);
         const { data, isValid, message } = await handlePOSTAXIORequest(`${Config.BACKEND_URL}/admin/roles`, reqData, 'PUT');
         if(!isValid) alert(message)
         return data;

@@ -57,6 +57,9 @@ import adGenderPanelController from '../controller/admin/genderPanel.js';
 import adDepartmentPanelController from '../controller/admin/departmentPanel.js';
 import adDegreePanelController from '../controller/admin/degreePanel.js';
 import adEducatorPanelController from '../controller/admin/educatorPanel.js';
+import adAcadStaffPanelController from '../controller/admin/academicStaffPanel.js';
+import adOtherUserPanelController from '../controller/admin/otherUserPanel.js';
+import adCommonDashboardController from '../controller/common/dashboard.js';
 
 
 
@@ -65,13 +68,21 @@ router.route('/admin/student-panel').get(isAuth, adStudentPanelController.getStu
 router.route('/admin/student-panel/:studentID?').put(isAuth, adStudentPanelController.putStudentStatus).delete(isAuth, adStudentPanelController.deleteStudent);
 router.route('/admin/educator-panel').get(isAuth, adEducatorPanelController.getEducatorList).post(isAuth, adEducatorPanelController.postNewEducator).put(isAuth, adEducatorPanelController.putEducatorDetails);
 router.route('/admin/educator-panel/:educatorID').put(isAuth, adEducatorPanelController.putEducatorStatus).delete(isAuth, adEducatorPanelController.deleteEducator);
+router.route('/admin/academic-staff-panel').get(isAuth, adAcadStaffPanelController.getAcademicStaffList).post(isAuth, adAcadStaffPanelController.postNewAcadStaff).put(isAuth, adAcadStaffPanelController.putAcadStaffDetails);
+router.route('/admin/academic-staff-panel/:staffID').put(isAuth, adAcadStaffPanelController.putAcadStaffStatus).delete(isAuth, adAcadStaffPanelController.deleteAcadStaff);
+router.route('/admin/other-user-panel').get(isAuth, adOtherUserPanelController.getUserList).post(isAuth, adOtherUserPanelController.postNewUser).put(isAuth, adOtherUserPanelController.putUserDetails);
+router.route('/admin/other-user-panel/:otherUserID').put(isAuth, adOtherUserPanelController.putUserStatus).delete(isAuth, adOtherUserPanelController.deleteUser);
+
+router.route('/admin/custom-role-list/:listType').get(isAuth, roleController.getRoleListForEducatorPanel)
+router.route('/admin/dashboard-data/user-panel').get(isAuth, adCommonDashboardController.getUserPanelDashboard)
+
 
 router.route('/admin/class-panel').get(isAuth, adClassPanelController.getAcademicClassList)
 router.route('/admin/section-panel').get(isAuth, adSectionPanelController.getAcademicSectionList)
 router.route('/admin/gender-panel').get(isAuth, adGenderPanelController.getGenderList)
 router.route('/admin/department-panel').get(isAuth, adDepartmentPanelController.getDepartmentList)
 router.route('/admin/degree-panel').get(isAuth, adDegreePanelController.getDegreeList)
-router.route('/admin/educator/role-list').get(isAuth, roleController.getRoleListForEducatorPanel)
+
 
 
 router.use('/', async (req, res) => {

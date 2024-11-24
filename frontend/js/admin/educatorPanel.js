@@ -3,7 +3,7 @@ import Config, { handleGETAXIORequest, handlePOSTAXIORequest } from '../config.j
 export async function getFormOptions() {
     try {
         const [roleOBJ, departmentOBJ, degreeOBJ, genderOBJ] = await Promise.all([
-            handleGETAXIORequest(`${Config.BACKEND_URL}/admin/educator/role-list`, 'GET'),
+            handleGETAXIORequest(`${Config.BACKEND_URL}/admin/custom-role-list/Educator`, 'GET'),
             handleGETAXIORequest(`${Config.BACKEND_URL}/admin/department-panel`, 'GET'),
             handleGETAXIORequest(`${Config.BACKEND_URL}/admin/degree-panel`, 'GET'),
             handleGETAXIORequest(`${Config.BACKEND_URL}/admin/gender-panel`, 'GET'),

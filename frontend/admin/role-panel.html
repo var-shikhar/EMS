@@ -62,12 +62,6 @@
                     <span class="nav-link-text ms-1">Other Users</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" href="report.html">
-                    <i class="material-symbols-rounded opacity-5">report</i>
-                    <span class="nav-link-text ms-1">Report</span>
-                </a>
-            </li>
             <li class="nav-item mt-3">
             <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Panel Data</h6>
             </li>
@@ -123,7 +117,8 @@
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S.No.</th>
                                     <th colspan="6" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role Name</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Interact</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Is Academic Role</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">Interact</th>
                                 </tr>
                             </thead>
                             <tbody id="role-list"></tbody>
@@ -146,6 +141,10 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input type="text" class="form-control border px-2" id="role-name" placeholder="Enter Role name" required>
+                        <div class="form-check my-2 ps-0">
+                            <input type="checkbox" class="form-check-input" id="isAcadRole">
+                            <label class="form-check-label" for="isAcadRole" checked>Is Academic Role</label>
+                        </div>                        
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -166,6 +165,10 @@
                     <div class="mb-3">
                         <input type="text" class="form-control border px-2" id="edit-role-name" placeholder="Enter Role name" required>
                     </div>
+                    <div class="form-check my-2 ps-0">
+                        <input type="checkbox" class="form-check-input" id="edIsAcadRole">
+                        <label class="form-check-label" for="edIsAcadRole">Is Academic Role</label>
+                    </div> 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn mb-0 delete-btn min-width-max-content" data-bs-dismiss="modal">Close</button>
@@ -179,7 +182,6 @@
     <!--   Core JS Files   -->
     <script src="../js/core/popper.min.js"></script>
     <script src="../js/core/bootstrap.min.js"></script>
-    <script src="../js/common.js"></script>
     <script src="../js/common.js"></script>
 
     <script type="module">
@@ -201,7 +203,11 @@
             const updateRoleModal = new bootstrap.Modal(updateModalBlock, { keyboard: false });
     
             const roleNameInput = document.getElementById('role-name');
+            const isAcadRoleInput = document.getElementById('isAcadRole');
+
             const editRoleNameInput = document.getElementById('edit-role-name');
+            const editIsAcadRoleInput = document.getElementById('edIsAcadRole');
+
     
             const saveRoleBtn = document.getElementById('save-role-btn');
             const updateRoleBtn = document.getElementById('update-role-btn');
@@ -240,9 +246,14 @@
                             <td colspan="6">
                                 <h6 class="mb-0 text-sm text-truncate">${item.name}</h6>
                             </td>
-                            <td class="align-middle">
-                                <button class="btn bg-gradient-dark mb-0 py-1 edit-btn" data-id="${item.id}">Edit Role</button>
-                                <button class="btn bg-gradient-dark mb-0 py-1 delete-btn" data-id="${item.id}">Delete Role</button>
+                            <td class='ps-4'>${item.isAcademicRole ? 'Academic' : item.isDefault ? 'Default' : 'Other'} Role</td>
+                            <td class="d-flex align-items-center justify-content-center gap-2 text-center">
+                                ${item.isDefault ? '-' : (
+                                    `
+                                        <button class="btn bg-gradient-dark mb-0 py-1 edit-btn" data-id="${item.id}">Edit Role</button>
+                                        <button class="btn bg-gradient-dark mb-0 py-1 delete-btn" data-id="${item.id}">Delete Role</button>
+                                    `
+                                )}
                             </td>
                         `;
                         tbody.appendChild(row);
@@ -276,13 +287,18 @@
             saveRoleBtn.addEventListener('click', async (event) => {
                 event.preventDefault();
     
-                const roleName = roleNameInput.value;
-                if (roleName.trim() === '') {
+                const formData = {
+                    roleName: roleNameInput.value,
+                    isAcademicRole: isAcadRoleInput.checked,
+                }
+
+                if (formData.roleName.trim() === '') {
                     alert('Role name is required!');
                     return;
                 }
     
-                const isSaved = await postNewRole(roleName);
+                
+                const isSaved = await postNewRole(formData);
                 if (isSaved) {
                     alert('Role added successfully!');
                     addRoleModal.hide();
@@ -296,19 +312,24 @@
                 const roleToEdit = roleList.find(item => item.id === roleID);
                 if (roleToEdit) {
                     editRoleNameInput.value = roleToEdit.name;
+                    editIsAcadRoleInput.checked = roleToEdit.isAcademicRole;
                     updateRoleModal.show();
     
                     updateRoleBtn.onclick = async (event) => {
                         event.preventDefault();
     
-                        const updatedRoleName = editRoleNameInput.value;
-    
-                        if (updatedRoleName.trim() === '') {
+                        let formData = {
+                            roleID: roleID,
+                            roleName: editRoleNameInput.value,
+                            isAcademicRole: editIsAcadRoleInput.checked,
+                        }
+
+                        if (formData.roleName.trim() === '') {
                             alert('Role name is required!');
                             return;
                         }
     
-                        const isUpdated = await updateRole(roleID, updatedRoleName);
+                        const isUpdated = await updateRole(formData);
                         if (isUpdated) {
                             alert('Role updated successfully!');
                             updateRoleModal.hide();

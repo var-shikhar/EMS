@@ -19,7 +19,7 @@ const getUserRoleList = async (req, res) => {
 
         const foundRoles = await UserRole.find();
         const roleList = foundRoles?.length > 0 ? foundRoles.reduce((acc, cur) => {
-            acc.push({ id: cur._id, name: cur.roleName })
+            acc.push({ id: cur._id, name: cur.roleName, isDefault: cur.isDefaultRole, isAcademicRole: cur.isAcademicRole })
             return acc;
         }, []) : [];
 
@@ -31,7 +31,7 @@ const getUserRoleList = async (req, res) => {
 };
 const postRole = async (req, res) => {
     const userID = req.user;
-    const { name } = req.body;
+    const { roleName, isAcademicRole } = req.body;
     try {
         const foundUser = await User.findById(userID);
         if (!foundUser) {
@@ -43,10 +43,14 @@ const postRole = async (req, res) => {
             return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission Denied!' });
         }
 
-        const foundRole = await UserRole.findOne({ roleName: name });
+        const foundRole = await UserRole.findOne({ roleName: roleName });
         if (foundRole) return res.status(RouteCode.CONFLICT.statusCode).json({ message: 'Role name already exists!' });
 
-        const newRole = new UserRole({ roleName: name });
+        const newRole = new UserRole({ 
+            roleName: roleName, 
+            isAcademicRole: isAcademicRole,
+            isDefaultRole: false,
+        });
         await newRole.save();
         return res.status(RouteCode.SUCCESS.statusCode).json({ message: 'New Role has added successfully' });
     } catch (err) {
@@ -56,7 +60,7 @@ const postRole = async (req, res) => {
 };
 const putRoleDetails = async (req, res) => {
     const userID = req.user;
-    const { id, name } = req.body;
+    const { roleID, roleName, isAcademicRole } = req.body;
     try {
         const foundUser = await User.findById(userID);
         if (!foundUser) {
@@ -68,15 +72,17 @@ const putRoleDetails = async (req, res) => {
             return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission Denied!' });
         }
 
-        const foundRole = await UserRole.findById(id);
+        const foundRole = await UserRole.findById(roleID);
         if (!foundRole) return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Role not found, Try again!' });
 
-        if(foundRole.roleName !== name){
-            const foundSimilarName = await UserRole.findOne({ roleName: name });
+        if(foundRole.roleName !== roleName){
+            const foundSimilarName = await UserRole.findOne({ roleName: roleName });
             if (foundSimilarName) return res.status(RouteCode.CONFLICT.statusCode).json({ message: 'Role name already exists, Try another name!' });
         }
 
-        foundRole.roleName = name ?? foundRole.roleName;
+        foundRole.roleName = roleName ?? foundRole.roleName;
+        foundRole.isAcademicRole = isAcademicRole ?? false;
+
         await foundRole.save();
         return res.status(RouteCode.SUCCESS.statusCode).json({ message: 'Role has updated successfully' });
     } catch (err) {
@@ -109,6 +115,7 @@ const deleteRole = async (req, res) => {
 // Custom Controller
 const getRoleListForEducatorPanel = async (req, res) => {
     const userID = req.user;
+    const { listType } = req.params;
     try {
         const foundUser = await User.findById(userID);
         if (!foundUser) {
@@ -120,7 +127,15 @@ const getRoleListForEducatorPanel = async (req, res) => {
             return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission Denied!' });
         }
 
-        const foundRoles = await UserRole.find({ $or: [{ roleName: 'Teacher' }, { roleName: 'Principal' }] });
+        let foundRoles = [];
+        if(listType === 'Academic'){
+            foundRoles = await UserRole.find({ isAcademicRole: true });
+        } else if(listType === 'Other'){
+            foundRoles = await UserRole.find({ $or: [{isAcademicRole: false}, {isDefaultRole: false}]});
+        } else {
+            foundRoles = await UserRole.find({$and: [ { isDefaultRole: true }, { roleName: { $ne: 'Student' } }]});
+        }
+
         const roleList = foundRoles?.length > 0 ? foundRoles.reduce((acc, cur) => {
             acc.push({ id: cur._id, name: cur.roleName })
             return acc;

@@ -105,3 +105,8 @@
     min-width: 60vw;
   }
 }
+
+.mh-50{
+  min-height: 50vh;
+  height: auto;
+}

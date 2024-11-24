@@ -62,12 +62,6 @@
                     <span class="nav-link-text ms-1">Other Users</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" href="report.html">
-                    <i class="material-symbols-rounded opacity-5">report</i>
-                    <span class="nav-link-text ms-1">Report</span>
-                </a>
-            </li>
             <li class="nav-item mt-3">
             <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Panel Data</h6>
             </li>
@@ -236,7 +230,7 @@
     <script src="../js/core/bootstrap.min.js"></script>
     <script src="../js/common.js"></script>
     <script type="module">
-        import { getFormOptions, getEducatorList, postNewEducator, putEducatorProfile, updateStatus, deleteEducator } from '../js/admin/educatorPanel.js';
+        import { getFormOptions, getAcadStaffList, postNewAcadStaff, putAcadStaffProfile, updateStatus, deleteAcadStaff } from '../js/admin/academicStaffPanel.js';
         document.addEventListener('DOMContentLoaded', async function () {
             let academicStaffList = [];
             let filteredList = [];
@@ -392,14 +386,14 @@
                 }
 
                 if(formMode === 'Add'){
-                    const isSubmitted = await postNewEducator(formData);
+                    const isSubmitted = await postNewAcadStaff(formData);
                     if(isSubmitted){
                         alert("Academic Staff's Profile has created succesfully!");
                         formModalTrigger.hide();
                         window.location.reload();
                     } 
                 } else if(formMode === 'Edit'){
-                    const isSubmitted = await putEducatorProfile(formData);
+                    const isSubmitted = await putAcadStaffProfile(formData);
                     if(isSubmitted){
                         alert("Academic Staff's Profile has updated succesfully!");
                         formModalTrigger.hide();
@@ -411,7 +405,7 @@
             
             // Handle Initial Data Fetch 
             async function handleInitialFetching(){
-                const staffList = await getEducatorList();
+                const staffList = await getAcadStaffList();
                 academicStaffList = staffList;
                 filteredList = staffList;
                 handleRederTable()
@@ -494,7 +488,7 @@
             async function handleDeletion(acadStaffID) {
                 const confirmation = confirm("Are you sure you want to delete this Academic Staff's Profile?");
                 if (confirmation) {
-                    let isDeleted = await deleteEducator(acadStaffID);
+                    let isDeleted = await deleteAcadStaff(acadStaffID);
                     if (isDeleted) {
                         alert('Academic Staff has deleted successfully!');
                         academicStaffList = academicStaffList.filter(item => item.id !== acadStaffID);
