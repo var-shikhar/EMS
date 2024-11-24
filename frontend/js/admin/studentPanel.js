@@ -51,6 +51,7 @@ export async function putStudentDetails(formData) {
     }
 }
 export async function updateStatus(studentID, value) {
+    alert(value ? 'True' : 'False');
     try {
         const reqData = JSON.stringify({ id: studentID, value: value });
         const { data, isValid, message } = await handlePOSTAXIORequest(`${Config.BACKEND_URL}/admin/student-panel/${studentID}`, reqData, 'PUT');

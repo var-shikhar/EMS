@@ -188,7 +188,7 @@
                         </div>
                         <div class="col-12 mb-3">
                             <label for="password" class="form-label fw-bold">Login Password</label>
-                            <input type="password" class="form-control border px-2" id="password" placeholder="*****" required>
+                            <input type="password" class="form-control border px-2" id="password" placeholder="*****" required autocomplete="off">
                         </div>
                         <small class="text-danger" id="create_student_form-error"></small>
                     </form>
@@ -249,7 +249,7 @@
                         </div>
                         <div class="col-12 mb-3">
                             <label for="edPassword" class="form-label fw-bold">Login Password</label>
-                            <input type="password" class="form-control border px-2" id="edPassword" placeholder="*****" required>
+                            <input type="password" class="form-control border px-2" id="edPassword" placeholder="*****" autocomplete="off">
                         </div>
                         <small class="text-danger" id="edit_student_form-error"></small>
                     </form>
@@ -314,7 +314,7 @@
             }
 
             const editStudentModal = document.getElementById('editStudentModal');
-            const editStudentModalTrigger = new bootstrap.Modal(addStudentModal, { keyboard: false });
+            const editStudentModalTrigger = new bootstrap.Modal(editStudentModal, { keyboard: false });
             
             const edStudentIDInput = document.getElementById('studentID');
             const edFirstNameInput = document.getElementById('edFirstName');
@@ -331,16 +331,16 @@
 
             const updateDetailsBtn = document.getElementById('update_student_details-btn');
             let updateFormValidation = {
-                firstName: true,
-                lastName: true,
-                displayName: true,
-                gender: true,
-                dob: true,
-                admissionNo: true,
-                admissionDate: true,
-                currClass: true,
-                currSection: true,
-                password: true,
+                firstName: false,
+                lastName: false,
+                displayName: false,
+                gender: false,
+                dob: false,
+                admissionNo: false,
+                admissionDate: false,
+                currClass: false,
+                currSection: false,
+                password: false,
             }
 
             handleInitialValues();
@@ -348,10 +348,11 @@
             searchInput.addEventListener('input', (event) => {
                 const searchTerm = event.target.value.toLowerCase();
                 filteredList = studentList.filter(item => 
-                    item.firstName.toLowerCase().includes(searchTerm) || 
-                    item.lastName.toLowerCase().includes(searchTerm) ||
-                    item.displayName.toLowerCase().includes(searchTerm) ||
-                    item.uniqueID.toLowerCase().includes(searchTerm)
+                    String(item.firstName).toLowerCase().includes(searchTerm) || 
+                    String(item.lastName).toLowerCase().includes(searchTerm) ||
+                    String(item.displayName).toLowerCase().includes(searchTerm) ||
+                    String(item.uniqueCode).includes(searchTerm) ||
+                    String(item.admissionNo).includes(searchTerm)
                 );
                 handleRederTable();
             });
@@ -367,7 +368,7 @@
             lastNameInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, lastNameInput, createStudentBtn, 'Last Name', createStudentBtnValidation, 'lastName', true, false));
             displayNameInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, displayNameInput, createStudentBtn, 'Display Name', createStudentBtnValidation, 'displayName', true, false));
             genderInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, genderInput, createStudentBtn, 'Gender', createStudentBtnValidation, 'gender', false, false));
-            passwordInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, passwordInput, createStudentBtn, 'Profile Password', createStudentBtnValidation, 'password', true, true));
+            passwordInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, passwordInput, createStudentBtn, 'Profile Password', createStudentBtnValidation, 'password', true, true, false));
             currentSectionInput.addEventListener('input', (e) => handleFormValidation(e.target.value, addStudentFormError, currentSectionInput, createStudentBtn, 'Current Section', createStudentBtnValidation, 'currSection', false, false));
             currentClassInput.addEventListener('input', (e) => {
                 handleFormValidation(e.target.value, addStudentFormError, currentClassInput, createStudentBtn, 'Current Class', createStudentBtnValidation, 'currClass', false, false);
@@ -397,7 +398,8 @@
                 const isSubmitted = await postNewStudent(formData);
                 if(isSubmitted){
                     alert('Student Profile has created succesfully!');
-                    addStudentModalTrigger.hide()
+                    addStudentModalTrigger.hide();
+                    window.location.reload();
                 }             
             });
 
@@ -425,6 +427,7 @@
                         <td colspan="4">
                             <h6 class="mb-0 text-sm text-truncate">${item.firstName} ${item.lastName}</h6>
                             <span class='text-xs bg-gradient-dark text-white rounded p-2 py-1'>${item.uniqueCode}</span>
+                            <span class='text-xs bg-gradient-dark text-white rounded p-2 py-1'>${item.displayName}</span>
                         </td>
                         <td class="text-center">
                             <h6 class="mb-0 text-sm text-truncate">${item.admissionNo}</h6>
@@ -448,7 +451,8 @@
                     if (event.target.classList.contains('editBtn')) handleProfileEdit(itemId);
                     if (event.target.classList.contains('activityBtn')) {
                         const currentStatus = event.target.getAttribute('data-current-status');
-                        handleStatusUpdate(itemId, !currentStatus);
+                        const statusValue = currentStatus === 'true';
+                        handleStatusUpdate(itemId, !statusValue);
                     }
                     if (event.target.classList.contains('deleteBtn')) handleDeletion(itemId);
                 });
@@ -575,22 +579,22 @@
 
             // Handle Student Profile Editing
             async function handleProfileEdit(itemId) {
+                await handleFormOptions(edCurrSectionInput, edCurrClassInput, edGenderInput);
                 const profileToEdit = studentList.find(item => item.id === itemId);
                 if (profileToEdit) {
+                    editStudentModalTrigger.show();
+
                     edStudentIDInput.value = itemId;
                     edFirstNameInput.value = profileToEdit.firstName;
                     edLastNameInput.value = profileToEdit.lastName;
                     edDisplayNameInput.value = profileToEdit.displayName;
                     edGenderInput.value = profileToEdit.gender;
-                    edDOBInput.value = profileToEdit.dob;
+                    edDOBInput.value = profileToEdit.dob ? new Date(profileToEdit.dob).toISOString().split('T')[0] : '';
                     edAdmissionNoInput.value = profileToEdit.admissionNo;
                     edAdmissionDateInput.value = profileToEdit.admissionDate ? new Date(profileToEdit.admissionDate).toISOString().split('T')[0] : '';
                     edCurrClassInput.value = profileToEdit.currentClass;
                     edCurrSectionInput.value = profileToEdit.currentSection;
-                    
-
-                    editStudentModalTrigger.show();
-                    handleFormOptions(edCurrSectionInput, edCurrClassInput, edGenderInput);
+                    edPasswordInput.value = '';
 
                     updateDetailsBtn.onclick = async (event) => {
                         event.preventDefault(); 
@@ -620,7 +624,7 @@
             }
 
             // Handle Common Form Validation
-            function handleFormValidation(value, errorElement, inputElement, submitBtn, errorTitle, validationObj, validationKey, hasLengthCheck = false, hasPasswordCheck = false) {
+            function handleFormValidation(value, errorElement, inputElement, submitBtn, errorTitle, validationObj, validationKey, hasLengthCheck = false, hasPasswordCheck = false, isRequired = true) {
                 const passwordREGEX = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
                 if (value.trim() === '') {
@@ -659,10 +663,8 @@
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
-        var options = {
-            damping: '0.5'
-        }
-        Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+            var options = { damping: '0.5' }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
     </script>
 </body>

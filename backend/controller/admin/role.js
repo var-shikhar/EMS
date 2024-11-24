@@ -105,6 +105,34 @@ const deleteRole = async (req, res) => {
     }
 };
 
+
+// Custom Controller
+const getRoleListForEducatorPanel = async (req, res) => {
+    const userID = req.user;
+    try {
+        const foundUser = await User.findById(userID);
+        if (!foundUser) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Unauthorized access, Try again!' });
+        }
+
+        const hasPermission = true;
+        if(!hasPermission){
+            return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission Denied!' });
+        }
+
+        const foundRoles = await UserRole.find({ $or: [{ roleName: 'Teacher' }, { roleName: 'Principal' }] });
+        const roleList = foundRoles?.length > 0 ? foundRoles.reduce((acc, cur) => {
+            acc.push({ id: cur._id, name: cur.roleName })
+            return acc;
+        }, []) : [];
+
+        return res.status(RouteCode.SUCCESS.statusCode).json(roleList);
+    } catch (err) {
+        console.error(err);
+        return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
+    }
+};
 export default {
-    getUserRoleList, postRole, putRoleDetails, deleteRole
+    getUserRoleList, postRole, putRoleDetails, deleteRole,
+    getRoleListForEducatorPanel
 }

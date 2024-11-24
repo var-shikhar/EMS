@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../img/favicon.png">
+  <title>Educator Panel - Education Management System - UTS</title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
+  <!-- Nucleo Icons -->
+  <link href="../css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/custom.css">
+</head>
+
+<body class="g-sidenav-show  bg-gray-100">
+    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2  bg-white my-2" id="sidenav-main">
+        <div class="sidenav-header">
+        <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+        <a class="navbar-brand px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
+            <img src="../img/logo-ct-dark.png" class="navbar-brand-img" width="26" height="26" alt="main_logo">
+            <span class="ms-1 text-sm text-dark">UTS</span>
+        </a>
+        </div>
+        <hr class="horizontal dark mt-0 mb-2">
+        <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+            <a class="nav-link text-dark" href="dashboard.html">
+                <i class="material-symbols-rounded opacity-5">dashboard</i>
+                <span class="nav-link-text ms-1">Dashboard</span>
+            </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link text-dark" href="student-panel.html">
+                <i class="material-symbols-rounded opacity-5">perm_contact_calendar</i>
+                <span class="nav-link-text ms-1">Student List</span>
+            </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active bg-gradient-dark text-white" href="educator-panel.html">
+                    <i class="material-symbols-rounded opacity-5">shield_person</i>
+                    <span class="nav-link-text ms-1">Educators List</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="academic-staff.html">
+                    <i class="material-symbols-rounded opacity-5">diversity_3</i>
+                    <span class="nav-link-text ms-1">Academic Staff List</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="other-user-panel.html">
+                    <i class="material-symbols-rounded opacity-5">settings_accessibility</i>
+                    <span class="nav-link-text ms-1">Other Users</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="report.html">
+                    <i class="material-symbols-rounded opacity-5">report</i>
+                    <span class="nav-link-text ms-1">Report</span>
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+            <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Panel Data</h6>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link text-dark" href="role-panel.html">
+                <i class="material-symbols-rounded opacity-5">category</i>
+                <span class="nav-link-text ms-1">Role List</span>
+            </a>
+            </li>
+        </ul>
+        </div>
+    </aside>
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+        <!-- Navbar -->
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+            <div class="container-fluid py-1 px-3">
+                <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="dashboard.html">Dashboard</a></li>
+                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Educator Panel</li>
+                </ol>
+                </nav>
+                <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                <ul class="navbar-nav d-flex align-items-center ms-auto  justify-content-end">
+                    <li class="nav-item d-flex align-items-center">
+                        <div id="logout-link" class="nav-link text-body font-weight-bold px-0 cursor-pointer">
+                            <i class="material-symbols-rounded">account_circle</i>
+                        </div>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+
+        <div class="container-fluid py-2">
+            <div class="d-flex gap-2 justify-content-between my-2">
+                <div class="input-group input-group-outline flex-fill bg-white">
+                    <input type="text" placeholder="Type Educator Name / ID to search..." class="form-control" id="search-educator">
+                </div>
+                <button class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="add-educator-btn">Add New Educator</button>
+            </div>
+            <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3 px-3 d-flex gap-2 align-items-center">
+                            <h6 class="tab-class activeTab">Educator List</h6>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                       <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S.No.</th>
+                                        <th colspan="4" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Educator Name & ID</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">Contact Info</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">User Role & Appointment Date</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">Department</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">Qualification</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">Status</th>
+                                        <th class="text-uppercase text-secondary text-xxs text-center font-weight-bolder opacity-7 ps-2">Interact</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="educator_table_body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="addEducatorModal" tabindex="-1" role="dialog" aria-labelledby="addEducatorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-lg-60" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h5 class="modal-title" id="addEducatorModalLabel">Add New Educator</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-employee-form">
+                        <div class="row border rounded p-2 mb-2 mx-md-2">
+                            <div class="col-12 my-1 mb-md-2 fw-bold text-dark border-bottom">Basic Details</div>
+                            <input class="col-12" type="hidden" name="educatorID" id="educatorID">
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="firstName" class="form-label fw-bold">First Name</label>
+                                <input type="text" class="form-control border px-2" id="firstName" placeholder="John" required>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="lastName" class="form-label fw-bold">Last Name</label>
+                                <input type="text" class="form-control border px-2" id="lastName" placeholder="Doe" required>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="displayName" class="form-label fw-bold">Display Name</label>
+                                <input type="text" class="form-control border px-2" id="displayName" placeholder="john_doe" required autocomplete="off">
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="gender" class="form-label fw-bold">Gender</label>
+                                <select class="form-control border px-2" id="gender" required></select>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="role" class="form-label fw-bold">Role</label>
+                                <select class="form-control border px-2" id="role" required></select>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="department" class="form-label fw-bold">Department</label>
+                                <select class="form-control border px-2" id="department" required></select>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="phone" class="form-label fw-bold">Phone</label>
+                                <input type="tel" class="form-control border px-2" id="phone" placeholder="9897XXXXXX" required>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="email" class="form-label fw-bold">Email</label>
+                                <input type="email" class="form-control border px-2" id="email" placeholder="john@example.com" required autocomplete="off">
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="password" class="form-label fw-bold">Password</label>
+                                <input type="password" class="form-control border px-2" id="password" placeholder="*****" required autocomplete="off">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="bio" class="form-label fw-bold">Bio</label>
+                                <textarea class="form-control border px-2" id="bio" placeholder="Write a brief bio..." rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row border rounded p-2 mb-2 mx-md-2">
+                            <div class="col-12 my-1 mb-md-2 fw-bold text-dark border-bottom">Academic Qualifications</div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="qualification" class="form-label fw-bold">Latest Qualification</label>
+                                <select class="form-control border px-2" id="qualification" required></select>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="passingYear" class="form-label fw-bold">Passing Year</label>
+                                <input type="number" class="form-control border px-2" id="passingYear" placeholder="2024" required>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="score" class="form-label fw-bold">Score/CGPA</label>
+                                <input type="text" class="form-control border px-2" id="score" placeholder="3.5/4.0" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="institutionName" class="form-label fw-bold">Institution Name</label>
+                                <input type="text" class="form-control border px-2" id="institutionName" placeholder="University / Institute Name" required>
+                            </div>
+                        </div>
+                        <div class="row border rounded p-2 mb-2 mx-md-2">
+                            <div class="col-12 my-1 mb-md-2 fw-bold text-dark border-bottom">Employment Details</div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="employmentDate" class="form-label fw-bold">Appointment Date</label>
+                                <input type="date" class="form-control border px-2" id="employmentDate" required>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="employmentSalary" class="form-label fw-bold">Appointed Salary</label>
+                                <input type="number" class="form-control border px-2" id="employmentSalary" placeholder="50000" required>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                <label for="yearsOfExp" class="form-label fw-bold">Years of Experience</label>
+                                <input type="number" class="form-control border px-2" id="yearsOfExp" placeholder="(i.e 2)" min="0" max="100" required>
+                            </div>
+                        </div>
+                        <div class="border rounded p-2 mb-2 mx-md-2">
+                            <div class="w-100 my-1 mb-md-2 fw-bold text-dark border-bottom">Previous Experience</div>
+                            <div class="d-flex flex-column gap-2" id="addExpList"></div>
+                        </div>
+                        <small class="text-danger" id="create_employee_form-error"></small>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" id="addModalCloseBtn">Close</button>
+                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="create-educator-btn">Add New Educator</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--   Core JS Files   -->
+    <script src="../js/core/popper.min.js"></script>
+    <script src="../js/core/bootstrap.min.js"></script>
+    <script src="../js/common.js"></script>
+    <script type="module">
+        import { getFormOptions, getEducatorList, postNewEducator, putEducatorProfile, updateStatus, deleteEducator } from '../js/admin/educatorPanel.js';
+        document.addEventListener('DOMContentLoaded', async function () {
+            let educatorList = [];
+            let filteredList = [];
+
+            let genderList = [];
+            let roleList = [];
+            let departmentList = [];
+            let degreeList = [];
+            let formMode = 'Add';
+
+            await handleInitialFetching();
+
+            const today = new Date();
+            const todayForInput = today.toISOString().split('T')[0];
+            const searchInput = document.getElementById('search-educator');
+
+            const addEducatorBtn = document.getElementById('add-educator-btn');            
+            const addEducatorModal = document.getElementById('addEducatorModal');
+            const addModalCloseBtn = document.getElementById('addModalCloseBtn');
+            const addEducatorModalTrigger = new bootstrap.Modal(addEducatorModal, { keyboard: false });
+
+            // Form Element
+            const createEmployeeForm = document.getElementById('create-employee-form');
+            const formLabel = document.getElementById('addEducatorModalLabel');
+            const createEmployeeFormError = document.getElementById('create_employee_form-error');
+            const createEducatorBtn = document.getElementById('create-educator-btn');
+            const addExpList = document.getElementById('addExpList');
+
+            const educatorIDInput = document.getElementById('educatorID');
+            const firstNameInput = document.getElementById('firstName');
+            const lastNameInput = document.getElementById('lastName');
+            const displayNameInput = document.getElementById('displayName');
+            const genderInput = document.getElementById('gender');
+            const roleInput = document.getElementById('role');
+            const departmentInput = document.getElementById('department');
+            const phoneInput = document.getElementById('phone');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const bioInput = document.getElementById('bio');
+            const qualificationInput = document.getElementById('qualification');
+            const passingYearInput = document.getElementById('passingYear');
+            const scoreInput = document.getElementById('score');
+            const institutionNameInput = document.getElementById('institutionName');
+            const employmentDateInput = document.getElementById('employmentDate');
+            const employmentSalaryInput = document.getElementById('employmentSalary');
+            const yearsOfExpInput = document.getElementById('yearsOfExp');
+
+            let createEmployeeFormValidation = {
+                firstName: true,
+                lastName: true,
+                displayName: true,
+                gender: true,
+                role: true,
+                department: true,
+                phone: true,
+                email: true,
+                password: true,
+                bio: false,
+                qualification: true,
+                passingYear: true,
+                score: true,
+                institutionName: true,
+                employmentDate: false,
+                employmentSalary: false,
+                yearsOfExp: false,
+                expOBJ: [{
+                    expInstitueName: true,
+                    jobRole: true,
+                    startDate: true,
+                    endDate: true,
+                }]
+            };
+            let addEXPListArray = [{ id: crypto.randomUUID(), expInstitueName: "", jobRole: "", startDate: "", endDate: "" }];
+
+            addModalCloseBtn.addEventListener('click', () => addEducatorModalTrigger.hide());
+            addEducatorBtn.addEventListener('click', () => {
+                addEducatorModalTrigger.show();
+                formMode = 'Add';
+                handleFormOptions(genderInput, roleInput, departmentInput, qualificationInput);
+                handleDefaultValueInitialization();
+                addEXPListArray?.length > 0 ? handleInitialExpList() : handleAddExpForAddForm();
+            });
+
+            async function handleFormOptions(genderElement, roleElement, departElement, degreeElement) {
+                if(degreeList?.length <= 0 || departmentList?.length <= 0 || roleList?.length <= 0 || genderList?.length <= 0){
+                    const { genders, degrees, departments, roles } = await getFormOptions();
+                    genderList = genders;
+                    degreeList = degrees;
+                    departmentList = departments;
+                    roleList = roles;
+                }
+
+                genderElement.innerHTML = '';
+                roleElement.innerHTML = ''; 
+                departElement.innerHTML = '';
+                degreeElement.innerHTML = '';
+
+                const defaultOptions = {
+                    gender: document.createElement('option'),
+                    role: document.createElement('option'),
+                    depart: document.createElement('option'),
+                    quali: document.createElement('option'),
+                }
+
+                Object.values(defaultOptions).forEach(option => {
+                    option.value = '';
+                    option.textContent = 'Select ...';
+                    option.disabled = true;
+                    option.selected = true;
+                });
+
+                genderElement.appendChild(defaultOptions.gender);
+                roleElement.appendChild(defaultOptions.role);
+                departElement.appendChild(defaultOptions.depart);
+                degreeElement.appendChild(defaultOptions.quali);
+
+                const optionSetter = [
+                    { list: degreeList, element: degreeElement},
+                    { list: departmentList, element: departElement},
+                    { list: roleList, element: roleElement},
+                    { list: genderList, element: genderElement},
+                ]
+
+                optionSetter?.forEach(item => {
+                    item.list?.forEach(listOption => {
+                        const option = document.createElement('option');
+                        option.value = listOption.id;
+                        option.textContent = listOption.name;
+                        item.element.appendChild(option);
+                    })
+                });
+            }
+
+            function handleInitialExpList() {
+                addExpList.innerHTML = '';
+
+                addEXPListArray.forEach((item, index) => {
+                    const newListItem = `
+                    <div class="p-2 border rounded p-4 row mx-auto w-100 position-relative" data-id=${item.id}>
+                        <div class="col-12 mb-3">
+                            <label for=${`expInstitueName${index}`} class="form-label fw-bold">Institution Name</label>
+                            <input type="text" class="form-control border px-2" id=${`expInstitueName${index}`} placeholder="University / Institute Name" value="${item.expInstitueName}">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label for=${`jobRole${index}`} class="form-label fw-bold">Job Role</label>
+                            <input type="text" class="form-control border px-2" id=${`jobRole${index}`} value="${item.jobRole}">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label for=${`jobStDate${index}`} class="form-label fw-bold">Start Date</label>
+                            <input type="date" class="form-control border px-2" id=${`jobStDate${index}`} value="${item.startDate}">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <label for=${`jobEdDate${index}`} class="form-label fw-bold">End Date</label>
+                            <input type="date" class="form-control border px-2" id=${`jobEdDate${index}`} value="${item.endDate}">
+                        </div>
+                        <div class="position-absolute top-0 end-0 me-2 mt-2 w-auto">
+                            ${addEXPListArray.length === index + 1
+                                ? `<button type="button" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content addQualiBtn"  id="addQualiBtn${index}">Add</button>` : ''}
+                            ${addEXPListArray.length > 0
+                                ? `<button type="button" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content removeQualiBtn" id="removeQualiBtn${index}" data-id=${item.id}>Remove</button>` : ''}
+                        </div>
+                    </div>`;
+                    addExpList.innerHTML += newListItem;
+                });
+
+                // Add event listeners dynamically
+                document.querySelectorAll(".addQualiBtn").forEach((btn) => {
+                    btn.addEventListener("click", handleAddExpForAddForm);
+                });
+
+                document.querySelectorAll(".removeQualiBtn").forEach((btn) => {
+                    btn.addEventListener("click", (e) => {
+                        const id = e.target.dataset.id;
+                        handleRemoveExp(id);
+                    });
+                });
+
+                // Add input change listeners to save the values dynamically
+                document.querySelectorAll("[id^=expInstitueName], [id^=jobRole], [id^=jobStDate], [id^=jobEdDate]").forEach((input) => {
+                    input.addEventListener("input", (e) => {
+                        const index = parseInt(input.id.match(/\d+/)[0]);
+                        const field = input.id.replace(/\d+/g, "").replace("expInstitueName", "expInstitueName").replace("jobRole", "jobRole").replace("jobStDate", "startDate").replace("jobEdDate", "endDate");
+                        addEXPListArray[index][field] = input.value;
+
+                        // Handle form validation
+                        handleFormValidation({
+                            value: e.target.value,
+                            errorElement: createEmployeeFormError,
+                            inputElement: input,
+                            submitBtn: createEducatorBtn,
+                            errorTitle: field.replace(/([A-Z])/g, " $1").trim(),
+                            inputType: field.includes("Date") ? "SKIP" : "Text",
+                            isRequired: true,
+                            validationObj: createEmployeeFormValidation,
+                            validationKey: field,
+                            isArray: true,
+                            arrayIndex: index
+                        });
+                    });
+                });
+            }
+
+            function handleAddExpForAddForm() {
+                // Dynamically Add Validation Object Keys and ExpList Array
+                addEXPListArray.push({ id: crypto.randomUUID(), expInstitueName: "", jobRole: "", startDate: "", endDate: "" });
+                createEmployeeFormValidation.expOBJ.push({
+                    expInstitueName: true,
+                    jobRole: true,
+                    startDate: true,
+                    endDate: true,
+                });
+                handleInitialExpList();
+                createEducatorBtn.disabled = checkSubmitValidation(createEmployeeFormValidation);
+            }
+
+            function handleRemoveExp(id) {
+                const foundIndex = addEXPListArray.findIndex(item => item.id === id);
+
+                if (foundIndex !== -1) {
+                    // Remove Dynamically Added Validation Object Keys and AddExpListArray
+                    addEXPListArray.splice(foundIndex, 1);
+                    createEmployeeFormValidation.expOBJ.splice(foundIndex, 1);
+                    handleInitialExpList();
+                    createEducatorBtn.disabled = checkSubmitValidation(createEmployeeFormValidation);
+                } else {
+                    console.warn(`Item with id ${id} not found in the array.`);
+                }
+            }
+
+
+            firstNameInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: firstNameInput, submitBtn: createEducatorBtn, errorTitle: 'First Name', validationObj: createEmployeeFormValidation, validationKey: 'firstName', inputType: 'Text', isRequired: true }));
+            lastNameInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: lastNameInput, submitBtn: createEducatorBtn, errorTitle: 'Last Name', validationObj: createEmployeeFormValidation, validationKey: 'lastName', inputType: 'Text', isRequired: true }));
+            displayNameInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: displayNameInput, submitBtn: createEducatorBtn, errorTitle: 'Display Name', validationObj: createEmployeeFormValidation, validationKey: 'displayName', inputType: 'Text', isRequired: true }));
+            genderInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: genderInput, submitBtn: createEducatorBtn, errorTitle: 'Gender', validationObj: createEmployeeFormValidation, validationKey: 'gender', inputType: 'Select', isRequired: true }));
+            roleInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: roleInput, submitBtn: createEducatorBtn, errorTitle: 'Role', validationObj: createEmployeeFormValidation, validationKey: 'role', inputType: 'Select', isRequired: true }));
+            departmentInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: departmentInput, submitBtn: createEducatorBtn, errorTitle: 'Department', validationObj: createEmployeeFormValidation, validationKey: 'department', inputType: 'Select', isRequired: true }));
+            phoneInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: phoneInput, submitBtn: createEducatorBtn, errorTitle: 'Phone', validationObj: createEmployeeFormValidation, validationKey: 'phone', inputType: 'Phone', isRequired: true }));
+            emailInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: emailInput, submitBtn: createEducatorBtn, errorTitle: 'Email', validationObj: createEmployeeFormValidation, validationKey: 'email', inputType: 'Email', isRequired: true }));
+            passwordInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: passwordInput, submitBtn: createEducatorBtn, errorTitle: 'Password', validationObj: createEmployeeFormValidation, validationKey: 'password', inputType: 'Password', isRequired: true }));
+            bioInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: bioInput, submitBtn: createEducatorBtn, errorTitle: 'Bio', validationObj: createEmployeeFormValidation, validationKey: 'bio', inputType: 'Text', isRequired: false, charLength: 20 }));
+            qualificationInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: qualificationInput, submitBtn: createEducatorBtn, errorTitle: 'Qualification', validationObj: createEmployeeFormValidation, validationKey: 'qualification', inputType: 'Select', isRequired: true }));
+            passingYearInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: passingYearInput, submitBtn: createEducatorBtn, errorTitle: 'Passing Year', validationObj: createEmployeeFormValidation, validationKey: 'passingYear', inputType: 'Number', isRequired: true, minValue: 1990, maxValue: 2050 }));
+            scoreInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: scoreInput, submitBtn: createEducatorBtn, errorTitle: 'Score', validationObj: createEmployeeFormValidation, validationKey: 'score', inputType: 'Number', isRequired: true, minValue: 0, maxValue: 100 }));
+            institutionNameInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: institutionNameInput, submitBtn: createEducatorBtn, errorTitle: 'Institution Name', validationObj: createEmployeeFormValidation, validationKey: 'institutionName', inputType: 'Text', isRequired: true, charLength: 10 }));
+            employmentDateInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: employmentDateInput, submitBtn: createEducatorBtn, errorTitle: 'Employment Date', validationObj: createEmployeeFormValidation, validationKey: 'employmentDate', inputType: 'SKIP', isRequired: false }));
+            employmentSalaryInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: employmentSalaryInput, submitBtn: createEducatorBtn, errorTitle: 'Employment Salary', validationObj: createEmployeeFormValidation, validationKey: 'employmentSalary', inputType: 'Number', isRequired: false }));
+            yearsOfExpInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: createEmployeeFormError, inputElement: yearsOfExpInput, submitBtn: createEducatorBtn, errorTitle: 'Total Experience', validationObj: createEmployeeFormValidation, validationKey: 'yearsOfExp', inputType: 'Number', isRequired: true, minValue: 0, maxValue: 100 }));
+
+            
+            createEducatorBtn.addEventListener('click', async function(e){
+                e.preventDefault();
+
+                const formData = {
+                    educatorID: educatorIDInput.value,
+                    firstNameValue: firstNameInput.value.trim(),
+                    lastNameValue: lastNameInput.value.trim(),
+                    displayNameValue: displayNameInput.value.trim(),
+                    genderValue: genderInput.value,
+                    roleValue: roleInput.value,
+                    departmentValue: departmentInput.value,
+                    phoneValue: phoneInput.value,
+                    emailValue: emailInput.value.trim(),
+                    passwordValue: passwordInput.value,
+                    bioValue: bioInput.value.trim(),
+                    qualificationValue: qualificationInput.value,
+                    passingYearValue: passingYearInput.value,
+                    scoreValue: scoreInput.value,
+                    institutionNameValue: institutionNameInput.value.trim(),
+                    employmentDateValue: employmentDateInput.value,
+                    employmentSalaryValue: employmentSalaryInput.value,
+                    yearsOfExpValue: yearsOfExpInput.value,
+                    experienceList: addEXPListArray,
+                }
+
+                if(formMode === 'Add'){
+                    const isSubmitted = await postNewEducator(formData);
+                    if(isSubmitted){
+                        alert('Educator Profile has created succesfully!');
+                        addEducatorModalTrigger.hide();
+                        window.location.reload();
+                    } 
+                } else if(formMode === 'Edit'){
+                    const isSubmitted = await putEducatorProfile(formData);
+                    if(isSubmitted){
+                        alert('Educator Profile has updated succesfully!');
+                        addEducatorModalTrigger.hide();
+                        await handleInitialFetching();
+                    } 
+                }       
+            });
+
+            
+
+            // Handle Initial Data Fetch 
+            async function handleInitialFetching(){
+                const eduList = await getEducatorList();
+                educatorList = eduList;
+                filteredList = eduList;
+                handleRederTable()
+            }
+
+            // Function to render the table
+            function handleRederTable() {
+                const educatorTableBody = document.getElementById('educator_table_body'); 
+                educatorTableBody.innerHTML = '';
+                filteredList?.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class='ps-4'>${index + 1}</td>
+                        <td colspan="4">
+                            <h6 class="mb-0 text-sm text-truncate">${item.firstName} ${item.lastName}</h6>
+                            <span class='text-xs bg-gradient-dark text-white rounded p-2 py-1'>${item.uniqueID}</span>
+                            <span class='text-xs bg-gradient-dark text-white rounded p-2 py-1'>${item.displayName}</span>
+                        </td>
+                        <td class="text-center">
+                            <h6 class="mb-0 text-sm text-truncate">+91 ${item.phone}</h6>
+                            <small class='text-xs bg-gradient-dark text-white rounded p-2 py-1'>${item.email}</small>
+                        </td>
+                        <td class="text-center">
+                            <h6 class="mb-0 text-sm text-truncate">${item.roleName}</h6>
+                            <span class='text-xs bg-gradient-dark text-white rounded p-2 py-1'>${item.employmentDate ? new Date(item.employmentDate).toLocaleDateString('en-GB') : '-'}</span>
+                        </td>
+                        <td><h6 class="ps-3 mb-0 text-sm text-center">${item.departmentName}</h6></td>
+                        <td><h6 class="ps-3 mb-0 text-sm text-center">${item.qualificationName}</h6></td>
+                        <td><h6 class="ps-3 mb-0 text-sm text-center">${item.isActive ? 'Active' : 'In-Active'}</h6></td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2 align-items-center">
+                                <button class="btn bg-gradient-dark mb-0 py-1 activityBtn" data-id="${item.id}" data-current-status="${item.isActive}">${item.isActive ? 'De-Activate' : 'Activate'}</button>
+                                <button class="btn bg-gradient-dark mb-0 py-1 editBtn" data-id="${item.id}">Edit Profile</button>
+                                <button class="btn bg-gradient-dark mb-0 py-1 deleteBtn" data-id="${item.id}">Delete</button>
+                            </div>
+                        </td>
+                    `;
+                    educatorTableBody.appendChild(row);
+                });
+
+                educatorTableBody.addEventListener('click', (event) => {
+                    const itemId = event.target.getAttribute('data-id');
+                    if (event.target.classList.contains('editBtn')) handleProfileEdit(itemId);
+                    if (event.target.classList.contains('activityBtn')) {
+                        const currentStatus = event.target.getAttribute('data-current-status');
+                        const statusValue = currentStatus === 'true';
+                        handleStatusUpdate(itemId, !statusValue);
+                    }
+                    if (event.target.classList.contains('deleteBtn')) handleDeletion(itemId);
+                });
+            }      
+
+            //  Event Listener for Search Input
+            searchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+                filteredList = educatorList.filter(item => 
+                    String(item.firstName).toLowerCase().includes(searchTerm) || 
+                    String(item.lastName).toLowerCase().includes(searchTerm) ||
+                    String(item.displayName).toLowerCase().includes(searchTerm) ||
+                    String(item.uniqueID).includes(searchTerm) ||
+                    String(item.email).includes(searchTerm) ||
+                    String(item.phone).includes(searchTerm)
+
+                );
+                handleRederTable();
+            });
+
+            //  Handle Student Status Update
+            async function handleStatusUpdate(educatorID, value) {
+                const confirmation = confirm(`Are you sure you want to ${value ? 'Activate' : 'DeActivate'} this Educator Profile?`);
+                if (confirmation) {
+                    let isDeleted = await updateStatus(educatorID, value);
+                    if (isDeleted) {
+                        alert(`Educator has  ${value ? 'Activated' : 'DeActivated'} successfully!`);
+                        handleInitialFetching();
+                    } else alert('Something went wrong, Try again!');
+                }
+            }
+            
+            // Handle Student Deletion
+            async function handleDeletion(educatorID) {
+                const confirmation = confirm("Are you sure you want to delete this Educator Profile?");
+                if (confirmation) {
+                    let isDeleted = await deleteEducator(educatorID);
+                    if (isDeleted) {
+                        alert('Educator has deleted successfully!');
+                        educatorList = educatorList.filter(item => item.id !== educatorID);
+                        filteredList = educatorList;
+                        handleRederTable();
+                    } else alert('Something went wrong, Try again!');
+                }
+            }
+
+
+            async function handleProfileEdit(eduID) {
+                addEducatorModalTrigger.show();
+                formMode = 'Edit';
+                formLabel.innerHTML = "Edit Educator Profile";
+                createEducatorBtn.innerHTML = "Update Profile";
+                await handleFormOptions(genderInput, roleInput, departmentInput, qualificationInput);
+                handleEditInitialization(eduID); 
+            }
+
+            function handleEditInitialization(id){
+                const foundItem = filteredList?.find(item => item.id === id);
+                if(foundItem){
+                    educatorIDInput.value = foundItem.id;
+                    firstNameInput.value = foundItem.firstName;
+                    lastNameInput.value = foundItem.lastName;
+                    displayNameInput.value = foundItem.displayName;
+                    genderInput.value = foundItem.gender;
+                    roleInput.value = foundItem.roleID;
+                    departmentInput.value = foundItem.departmentID;
+                    phoneInput.value = foundItem.phone;
+                    emailInput.value = foundItem.email;
+                    passwordInput.value = '';
+                    bioInput.value = foundItem.bio;
+                    qualificationInput.value = foundItem.qualificationID;
+                    passingYearInput.value = foundItem.passingYear;
+                    scoreInput.value = foundItem.score;
+                    institutionNameInput.value = foundItem.institutionName;
+                    employmentDateInput.value = foundItem.employmentDate ? new Date(foundItem.employmentDate).toISOString().split('T')[0] : '';
+                    employmentSalaryInput.value = foundItem.employmentSalary;
+                    yearsOfExpInput.value = foundItem.yearsOfExp;
+                    addEXPListArray = foundItem.expOBJ?.map(item => {
+                        return {
+                            id: crypto.randomUUID(), 
+                            expInstitueName: item.expInstitueName, 
+                            jobRole: item.jobRole, 
+                            startDate: item.startDate ? new Date(item.startDate).toISOString().split('T')[0] : '-', 
+                            endDate: item.endDate ?  new Date(item.endDate).toISOString().split('T')[0] : '-'
+                        }
+                    }) ?? [];
+
+                    addEXPListArray?.length > 0 ? handleInitialExpList() : handleAddExpForAddForm();
+                    createEmployeeFormValidation.expOBJ = 
+                        Array.isArray(foundItem.expOBJ) && foundItem.expOBJ.length > 0 
+                        ? foundItem.expOBJ?.map(item =>  ({expInstitueName: false, jobRole: false, startDate: false, endDate: false })) 
+                        : [{ expInstitueName: true, jobRole: true, startDate: true, endDate: true }];
+
+                    handleValidationOBJValues(createEmployeeFormValidation, false)
+                }
+            }
+
+            function handleDefaultValueInitialization(){
+                formLabel.innerHTML = "Add New Educator";
+                createEducatorBtn.innerHTML = "Add New Educator";
+
+                educatorIDInput.value = '';
+                firstNameInput.value = '';
+                lastNameInput.value = '';
+                displayNameInput.value = '';
+                genderInput.value = '';
+                roleInput.value = '';
+                departmentInput.value = '';
+                phoneInput.value = '';
+                emailInput.value = '';
+                passwordInput.value = '';
+                bioInput.value = '';
+                qualificationInput.value = '';
+                passingYearInput.value = '';
+                scoreInput.value = '';
+                institutionNameInput.value = '';
+                employmentDateInput.value = '';
+                employmentSalaryInput.value = '';
+                yearsOfExpInput.value = '';
+                addEXPListArray = [{ id: crypto.randomUUID(), expInstitueName: "", jobRole: "", startDate: "", endDate: "" }];
+                handleValidationOBJValues(createEmployeeFormValidation, true)
+            }
+
+
+            // Handle Common Form Validation
+            function handleFormValidation({
+                value,
+                errorElement,
+                inputElement,
+                submitBtn,
+                errorTitle,
+                validationObj,
+                validationKey,
+                inputType,
+                isRequired = true,
+                charLength = 3,
+                minValue = 1000,
+                maxValue = 1000000,
+                minDate = new Date(),
+                maxDate = new Date(),
+                isArray = false,
+                arrayIndex = 0,
+            }) {
+                const passwordREGEX = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+                const emailREGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const phoneREGEX = /^\d{10}$/;
+
+                // Helper function to set validation error
+                const setError = (message) => {
+                    errorElement.innerHTML = message;
+                    inputElement.classList.add("error-form-input");
+                    if (isArray) validationObj.expOBJ[arrayIndex][validationKey] = true;
+                    else validationObj[validationKey] = true;
+                    submitBtn.disabled = true;
+                };
+
+                // Helper function to reset validation error
+                const resetError = () => {
+                    errorElement.innerHTML = "";
+                    inputElement.classList.remove("error-form-input");
+                    if (isArray) validationObj.expOBJ[arrayIndex][validationKey] = false;
+                    else validationObj[validationKey] = false;
+
+                    submitBtn.disabled = checkSubmitValidation(validationObj);
+                };
+
+                // Check for empty value if required
+                if (isRequired && value.trim() === "") {
+                    setError(`${errorTitle} is required!`);
+                    return;
+                }
+
+                if (inputType === "Text" && value.trim().length <= charLength) {
+                    setError(`Minimum ${charLength} characters are required for ${errorTitle}!`);
+                    return;
+                } else if (inputType === "Password" && !passwordREGEX.test(value)) {
+                    setError(`${errorTitle} must be at least 8 characters long, including an uppercase, a lowercase, a number, and a special character!`);
+                    return;
+                } else if (inputType === "Email" && !emailREGEX.test(value)) {
+                    setError(`Please enter a valid ${errorTitle}!`);
+                    return;
+                } else if (inputType === "Phone" && !phoneREGEX.test(value)) {
+                    setError(`${errorTitle} must be a valid 10-digit phone number!`);
+                    return;
+                } else if (inputType === "Number" && (value < minValue || value > maxValue)) {
+                    setError(`${errorTitle} must be between ${minValue} and ${maxValue}!`);
+                    return;
+                } else if (inputType === "Date") {
+                    const newDateValue = new Date(value);
+                    newDateValue.setHours(0, 0, 0, 0);
+                    minDate.setHours(0, 0, 0, 0);
+                    maxDate.setHours(0, 0, 0, 0);
+
+                    if (newDateValue < minDate || newDateValue > maxDate) {
+                        setError(`${errorTitle} must be between ${minDate.toLocaleDateString("en-GB")} and ${maxDate.toLocaleDateString("en-GB")}!`);
+                        return;
+                    }
+                }
+
+                resetError();
+            }
+
+            // Function to check the overall validation for the submit button
+            function checkSubmitValidation(validationObj) {
+                return Object.values(validationObj).some(value => {
+                    if (Array.isArray(value)) return value.some(obj => Object.values(obj).some(innerValue => innerValue));
+                    else if (typeof value === 'object' && value !== null)  return checkSubmitValidation(value);
+                    else return value; 
+                });
+            }
+
+            // Set Validation Objects Value
+            function handleValidationOBJValues(validOBJ, value) {
+                Object.entries(validOBJ).forEach(([key, keyValue]) => {
+                    if (Array.isArray(keyValue)) {
+                        keyValue.forEach((obj, index) => {
+                            if (typeof obj === 'object' && obj !== null) {
+                                keyValue[index] = Object.fromEntries(Object.keys(obj).map(innerKey => [innerKey, value]));
+                            }
+                        });
+                    } else if (typeof keyValue === 'object' && keyValue !== null) {
+                        handleValidationOBJValues(keyValue, value);
+                    } else {
+                        validOBJ[key] = value;
+                    }
+                });
+            }
+
+        });
+    </script>
+    
+    <script>
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+            var options = { damping: '0.5' }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+</body>
+
+</html>

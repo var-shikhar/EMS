@@ -99,3 +99,9 @@
 .error-form-input{
   border: 1px solid red !important; 
 }
+
+@media (min-width: 992px) {
+  .mw-lg-60 {
+    min-width: 60vw;
+  }
+}

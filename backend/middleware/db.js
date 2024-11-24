@@ -13,10 +13,14 @@ import BookDetail from '../modal/bookDetail.js';
 import Tag from '../modal/tags.js';
 import SubscriptionType from '../modal/subscriptionType.js';
 import UserSubscription from '../modal/usersSubscription.js';
+import Subject from '../modal/subject.js';
+import Degree from '../modal/degree.js';
+import Department from '../modal/department.js';
 
 dotenv.config();
 const { MONGO_URI, SALT } = process.env;
-const { ACADEMIC_CLASSES, ACADEMIC_SECTIONS, BOOK_CATEGORY, BOOK_GENRES, GENDER, USERS, USER_ROLE, DEF_BOOKS, BOOK_TAGS, SUBSCRIPTION_TYPES, USER_SUBSCRIPTIONS } = DEFAULT_DATA;
+const { DEF_SUBJECTS, DEF_DEGREES, DEF_DEPARTMENTS,
+    ACADEMIC_CLASSES, ACADEMIC_SECTIONS, BOOK_CATEGORY, BOOK_GENRES, GENDER, USERS, USER_ROLE, DEF_BOOKS, BOOK_TAGS, SUBSCRIPTION_TYPES, USER_SUBSCRIPTIONS } = DEFAULT_DATA;
 
 const connectDB = async () => {
     try {
@@ -33,6 +37,11 @@ const connectDB = async () => {
         const tagCount = await Tag.countDocuments();
         const subscriptionTypeCount = await SubscriptionType.countDocuments();
         const userSubscriptionCount = await UserSubscription.countDocuments();
+
+        const subjectCount = await Subject.countDocuments();
+        const degreeCount = await Degree.countDocuments();
+        const departmentCount = await Department.countDocuments();
+
 
         if (academicClassCount === 0) {
             await AcademicClass.insertMany(ACADEMIC_CLASSES);
@@ -176,6 +185,36 @@ const connectDB = async () => {
 
                 console.log('Default Books Added!');
             }
+        }
+
+        if (subjectCount === 0 && DEF_SUBJECTS?.length > 0) {
+            await Subject.insertMany(DEF_SUBJECTS);
+            console.log('Default Subjects have inserted successfully!');
+        }
+
+        if (departmentCount === 0 && DEF_DEPARTMENTS?.length > 0) {
+            await Department.insertMany(DEF_DEPARTMENTS);
+            console.log('Default Departments have inserted successfully!');
+        }
+        
+        if (degreeCount === 0 && DEF_DEGREES?.length > 0) {
+            const departmentList = await Department.find();
+            for (const degree of DEF_DEGREES) {
+                const foundDept = departmentList.find(option => option.name.toLowerCase() === degree.department.toLowerCase())
+            
+                if(foundDept){
+                    let newDegree = new Degree({
+                        name: degree.name,
+                        code: degree.code,
+                        durationYears: degree.durationYears,
+                        description: degree.description,
+                        department: foundDept._id,
+                        isActive: degree.isActive,
+                    });
+                    await newDegree.save();
+                }
+            }
+            console.log('Default Degree have inserted successfully!');
         }
 
         

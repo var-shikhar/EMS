@@ -366,6 +366,96 @@ const USER_SUBSCRIPTIONS = [
     endDate: new Date('2025-07-10'),
   },
 ];
+const DEF_SUBJECTS = [
+  {
+    name: "Mathematics",
+    code: "MATH101",
+    description: "Basic mathematics covering algebra, geometry, and trigonometry.",
+    isActive: true
+  },
+  {
+    name: "Physics",
+    code: "PHY102",
+    description: "Introduction to mechanics, waves, and thermodynamics.",
+    isActive: true
+  },
+  {
+    name: "Chemistry",
+    code: "CHEM103",
+    description: "Basic concepts of organic and inorganic chemistry.",
+    isActive: true
+  },
+  {
+    name: "History",
+    code: "HIST104",
+    description: "World history focusing on ancient and modern civilizations.",
+    isActive: false
+  },
+];
+const DEF_DEGREES = [
+  {
+    name: "Bachelor of Science in Mathematics",
+    code: "BSCMATH",
+    durationYears: 3,
+    description: "A degree focusing on mathematical theories and applications.",
+    department: "Department of Mathematics",
+    isActive: true
+  },
+  {
+    name: "Bachelor of Science in Physics",
+    code: "BSCPHY",
+    durationYears: 3,
+    description: "An undergraduate program in classical and modern physics.",
+    department: "Department of Physics",
+    isActive: true
+  },
+  {
+    name: "Bachelor of Arts in History",
+    code: "BAHIST",
+    durationYears: 3,
+    description: "A degree exploring global history and its impact on modern society.",
+    department: "Department of History",
+    isActive: true
+  },
+  {
+    name: "Master of Science in Chemistry",
+    code: "MSCHEM",
+    durationYears: 2,
+    description: "Advanced studies in organic and inorganic chemistry.",
+    department: "Department of Chemistry",
+    isActive: false
+  }
+];
+const DEF_DEPARTMENTS = [
+  {
+    name: "Department of Mathematics",
+    code: "DEPTMATH",
+    description: "Focuses on mathematical research and education.",
+    isActive: true
+  },
+  {
+    name: "Department of Physics",
+    code: "DEPTPHY",
+    description: "Engaged in teaching and research in physics.",
+    isActive: true
+  },
+  {
+    name: "Department of Chemistry",
+    code: "DEPTCHEM",
+    description: "Covers chemical sciences and interdisciplinary research.",
+    isActive: true
+  },
+  {
+    name: "Department of History",
+    code: "DEPTHIST",
+    description: "Explores historical studies and heritage preservation.",
+    isActive: false
+  }
+];
 
-const DEFAULT_DATA = { ACADEMIC_CLASSES, ACADEMIC_SECTIONS, BOOK_CATEGORY, BOOK_GENRES, GENDER, USER_ROLE, USERS, DEF_BOOKS, BOOK_TAGS, SUBSCRIPTION_TYPES, USER_SUBSCRIPTIONS }
+
+
+
+const DEFAULT_DATA = { DEF_SUBJECTS, DEF_DEGREES, DEF_DEPARTMENTS, 
+  ACADEMIC_CLASSES, ACADEMIC_SECTIONS, BOOK_CATEGORY, BOOK_GENRES, GENDER, USER_ROLE, USERS, DEF_BOOKS, BOOK_TAGS, SUBSCRIPTION_TYPES, USER_SUBSCRIPTIONS }
 export default DEFAULT_DATA;
