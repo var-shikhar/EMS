@@ -50,11 +50,11 @@ router.route('/admin/dashboard/analytics').get(isAuth, reportController.getDashb
 
 
 // Admin Routes
-import adClassPanelController from '../controller/admin/classPanel.js';
+import adClassPanelController from '../controller/masters/classPanel.js';
 import adSectionPanelController from '../controller/admin/sectionPanel.js';
 import adStudentPanelController from '../controller/admin/studentPanel.js';
 import adGenderPanelController from '../controller/masters/genderPanel.js';
-import adDepartmentPanelController from '../controller/admin/departmentPanel.js';
+import adDepartmentPanelController from '../controller/masters/departmentPanel.js';
 import adDegreePanelController from '../controller/admin/degreePanel.js';
 import adEducatorPanelController from '../controller/admin/educatorPanel.js';
 import adAcadStaffPanelController from '../controller/admin/academicStaffPanel.js';
@@ -80,11 +80,12 @@ import masterSubjectController from '../controller/masters/subject.js';
 
 router.route('/admin/subject-panel/:subjectID?').get(isAuth, masterSubjectController.getSubjectList).post(isAuth, masterSubjectController.postSubject).put(isAuth, masterSubjectController.putSubjectDetails).delete(isAuth, masterSubjectController.deleteSubject);
 router.route('/admin/gender-panel/:genderID?').get(isAuth, adGenderPanelController.getGenderList).post(isAuth, adGenderPanelController.postGender).put(isAuth, adGenderPanelController.putGenderDetails).delete(isAuth, adGenderPanelController.deleteGender);
+router.route('/admin/class-panel/:classID?').get(isAuth, adClassPanelController.getAcademicClassList).post(isAuth, adClassPanelController.postClass).put(isAuth, adClassPanelController.putClassDetails).delete(isAuth, adClassPanelController.deleteClass);
+router.route('/admin/department-panel/hod-list').get(isAuth, adDepartmentPanelController.getUserList);
+router.route('/admin/department-panel/:departmentID?').get(isAuth, adDepartmentPanelController.getDepartmentList).post(isAuth, adDepartmentPanelController.postDepartment).put(isAuth, adDepartmentPanelController.putDepartmentDetails).delete(isAuth, adDepartmentPanelController.deleteDepartment);
 
 
-router.route('/admin/class-panel').get(isAuth, adClassPanelController.getAcademicClassList)
 router.route('/admin/section-panel').get(isAuth, adSectionPanelController.getAcademicSectionList)
-router.route('/admin/department-panel').get(isAuth, adDepartmentPanelController.getDepartmentList)
 router.route('/admin/degree-panel').get(isAuth, adDegreePanelController.getDegreeList)
 
 

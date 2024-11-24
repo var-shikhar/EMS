@@ -165,7 +165,7 @@
     <script src="../js/core/bootstrap.min.js"></script>
     <script src="../js/common.js"></script>
     <script type="module">
-        import { getGenderList, postNewGender, putGenderDetails, deleteGender } from '../js/master/gender.js';
+        import { getClassList, postNewClass, putClassDetails, deleteClass } from '../js/master/class.js';
         document.addEventListener('DOMContentLoaded', async function () {
             let classList = [];
             let filteredList = [];
@@ -212,14 +212,14 @@
                 }
 
                 if(formMode === 'Add'){
-                    const isSubmitted = await postNewGender(formData);
+                    const isSubmitted = await postNewClass(formData);
                     if(isSubmitted){
                         alert("Class has created succesfully!");
                         formModalTrigger.hide();
                         window.location.reload();
                     } 
                 } else if(formMode === 'Edit'){
-                    const isSubmitted = await putGenderDetails(formData);
+                    const isSubmitted = await putClassDetails(formData);
                     if(isSubmitted){
                         alert("Class has updated succesfully!");
                         formModalTrigger.hide();
@@ -231,7 +231,7 @@
             
             // Handle Initial Data Fetch 
             async function handleInitialFetching(){
-                const newList = await getGenderList();
+                const newList = await getClassList();
                 classList = newList;
                 filteredList = newList;
                 handleRederTable()
@@ -275,12 +275,12 @@
             async function handleDeletion(classID) {
                 const confirmation = confirm("Are you sure you want to delete this Class?");
                 if (confirmation) {
-                    let isDeleted = await deleteGender(classID);
+                    let isDeleted = await deleteClass(classID);
                     if (isDeleted) {
                         alert('Class has deleted successfully!');
                         classList = classList.filter(item => item.id !== classID);
                         filteredList = classList;
-                        handleRederTable();
+                        window.location.reload();
                     } else alert('Something went wrong, Try again!');
                 }
             }
