@@ -106,7 +106,6 @@ const deleteClass = async (req, res) => {
     }
 };
 
-
 export default {
     getAcademicClassList, postClass, putClassDetails, deleteClass
 }

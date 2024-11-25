@@ -4,6 +4,7 @@ import constant from "../../constant/constant.js";
 import commonFn from "../../helper/common.js";
 import EducatorRole from "../../modal/educatorRole.js";
 import User from "../../modal/users.js";
+import UserRole from "../../modal/role.js";
 
 dotenv.config();
 
@@ -289,6 +290,40 @@ const deleteEducator = async (req, res) => {
 
 
 
+// Get Teachers List
+const getTeachersList = async (req, res) => {
+    const userID = req.user;
+    try {
+        const foundUser = await User.findById(userID);
+        if (!foundUser || foundUser.isBlocked || !foundUser.isActive) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Unauthorized access, Try again!' });
+        }
+
+        const hasPermission = true;
+        if(!hasPermission){
+            return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission Denied!' });
+        }
+
+        const foundRole = await UserRole.findOne({ roleName: 'Teacher' });
+        if(!foundRole) return res.status(RouteCode.EXPECTATION_FAILED.statusCode).json({ message: 'Something went wrong, Try again!' });
+
+        const foundTeachers = await User.find({ userRole: foundRole._id, isActive: true });
+        const teacherList = foundTeachers?.length > 0 ? foundTeachers.reduce((acc, cur) => {
+            acc.push({ 
+                id: cur._id,
+                name: cur.firstName + ' ' + cur.lastName ?? '',
+            })
+            return acc;
+        }, []) : [];
+
+        return res.status(RouteCode.SUCCESS.statusCode).json(teacherList);
+    } catch (err) {
+        console.error('Error Getting Teacher List', err);
+        return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
+    }
+};
+
+
 export default {
-    getEducatorList, postNewEducator, putEducatorDetails, putEducatorStatus, deleteEducator
+    getEducatorList, postNewEducator, putEducatorDetails, putEducatorStatus, deleteEducator, getTeachersList
 }

@@ -24,4 +24,4 @@ const academicSectionSchema = mongoose.Schema({
 const AcademicSection= mongoose.model('AcademicSection', academicSectionSchema);
 
 export default AcademicSection
-  
+   

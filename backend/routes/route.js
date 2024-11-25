@@ -51,7 +51,7 @@ router.route('/admin/dashboard/analytics').get(isAuth, reportController.getDashb
 
 // Admin Routes
 import adClassPanelController from '../controller/masters/classPanel.js';
-import adSectionPanelController from '../controller/admin/sectionPanel.js';
+import adSectionPanelController from '../controller/masters/sectionPanel.js';
 import adStudentPanelController from '../controller/admin/studentPanel.js';
 import adGenderPanelController from '../controller/masters/genderPanel.js';
 import adDepartmentPanelController from '../controller/masters/departmentPanel.js';
@@ -83,13 +83,11 @@ router.route('/admin/gender-panel/:genderID?').get(isAuth, adGenderPanelControll
 router.route('/admin/class-panel/:classID?').get(isAuth, adClassPanelController.getAcademicClassList).post(isAuth, adClassPanelController.postClass).put(isAuth, adClassPanelController.putClassDetails).delete(isAuth, adClassPanelController.deleteClass);
 router.route('/admin/department-panel/hod-list').get(isAuth, adDepartmentPanelController.getUserList);
 router.route('/admin/department-panel/:departmentID?').get(isAuth, adDepartmentPanelController.getDepartmentList).post(isAuth, adDepartmentPanelController.postDepartment).put(isAuth, adDepartmentPanelController.putDepartmentDetails).delete(isAuth, adDepartmentPanelController.deleteDepartment);
-
 router.route('/admin/degree-panel/dept-list').get(isAuth, adDepartmentPanelController.getShDeptList);
 router.route('/admin/degree-panel/:degreeID?').get(isAuth, adDegreePanelController.getDegreeList).post(isAuth, adDegreePanelController.postDegree).put(isAuth, adDegreePanelController.putDegreeDetails).delete(isAuth, adDegreePanelController.deleteDegree);
 
-
-router.route('/admin/section-panel').get(isAuth, adSectionPanelController.getAcademicSectionList)
-
+router.route('/admin/section-panel/teacher-list').get(isAuth, adEducatorPanelController.getTeachersList)
+router.route('/admin/section-panel/:sectionID?').get(isAuth, adSectionPanelController.getAcademicSectionList).post(isAuth, adSectionPanelController.postSection).put(isAuth, adSectionPanelController.putSectionDetails).delete(isAuth, adSectionPanelController.deleteSection);
 
 
 router.use('/', async (req, res) => {
