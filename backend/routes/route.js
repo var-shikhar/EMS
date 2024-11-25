@@ -55,7 +55,7 @@ import adSectionPanelController from '../controller/admin/sectionPanel.js';
 import adStudentPanelController from '../controller/admin/studentPanel.js';
 import adGenderPanelController from '../controller/masters/genderPanel.js';
 import adDepartmentPanelController from '../controller/masters/departmentPanel.js';
-import adDegreePanelController from '../controller/admin/degreePanel.js';
+import adDegreePanelController from '../controller/masters/degreePanel.js';
 import adEducatorPanelController from '../controller/admin/educatorPanel.js';
 import adAcadStaffPanelController from '../controller/admin/academicStaffPanel.js';
 import adOtherUserPanelController from '../controller/admin/otherUserPanel.js';
@@ -84,9 +84,11 @@ router.route('/admin/class-panel/:classID?').get(isAuth, adClassPanelController.
 router.route('/admin/department-panel/hod-list').get(isAuth, adDepartmentPanelController.getUserList);
 router.route('/admin/department-panel/:departmentID?').get(isAuth, adDepartmentPanelController.getDepartmentList).post(isAuth, adDepartmentPanelController.postDepartment).put(isAuth, adDepartmentPanelController.putDepartmentDetails).delete(isAuth, adDepartmentPanelController.deleteDepartment);
 
+router.route('/admin/degree-panel/dept-list').get(isAuth, adDepartmentPanelController.getShDeptList);
+router.route('/admin/degree-panel/:degreeID?').get(isAuth, adDegreePanelController.getDegreeList).post(isAuth, adDegreePanelController.postDegree).put(isAuth, adDegreePanelController.putDegreeDetails).delete(isAuth, adDegreePanelController.deleteDegree);
+
 
 router.route('/admin/section-panel').get(isAuth, adSectionPanelController.getAcademicSectionList)
-router.route('/admin/degree-panel').get(isAuth, adDegreePanelController.getDegreeList)
 
 
 
