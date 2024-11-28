@@ -52,3 +52,49 @@ export async function deleteAsset(assetID) {
         return false;
     }
 }
+
+
+// Order Controller
+export async function getOrderFormOptions() {
+    try {
+        const { data, isValid, message } = await handleGETAXIORequest(`${Config.INVENTORY_BACKEND}/admin/vendor-list`, 'GET');
+        if(!isValid) alert(message)        
+        return data ?? [];
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}
+export async function postNewOrder(formData) {
+    try {
+        const reqData = JSON.stringify(formData);
+        const { data, isValid, message } = await handlePOSTAXIORequest(`${Config.INVENTORY_BACKEND}/admin/asset-panel`, reqData, 'POST');
+        if(!isValid) alert(message)
+        return isValid;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+// Allotment Controller
+export async function getAllotmentUserType() {
+    try {
+        const { data, isValid, message } = await handleGETAXIORequest(`${Config.INVENTORY_BACKEND}/admin/role-list`, 'GET');
+        if(!isValid) alert(message)        
+        return data ?? [];
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}
+export async function getAllotmentUsers(roleID) {
+    try {
+        const { data, isValid, message } = await handleGETAXIORequest(`${Config.INVENTORY_BACKEND}/admin/users-list/${roleID}`, 'GET');
+        if(!isValid) alert(message)        
+        return data ?? [];
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}

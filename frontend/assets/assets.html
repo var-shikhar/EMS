@@ -166,28 +166,143 @@
         </div>
     </div>
 
+    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h5 class="modal-title" id="orderModalLabel">Add New Order</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="order-form" class="row">
+                        <input class="" type="hidden" name="orderAssetID" id="orderAssetID">
+                        <div class="mb-3 col-12">
+                            <label for="orderVendorID" class="form-label fw-bold">Select Vendor</label>
+                            <select class="form-control border px-2" id="orderVendorID" name="orderVendorID" required></select>
+                        </div>
+                        <div class="mb-3 col-12 col-md-6">
+                            <label for="assetPrice" class="form-label fw-bold">Asset Price</label>
+                            <input type="number" step="0.2" class="form-control border px-2" id="assetPrice" name="assetPrice" placeholder="(i.e. ₹50)" required>
+                        </div>
+                        <div class="mb-3 col-12 col-md-6">
+                            <label for="assetQuantity" class="form-label fw-bold">Asset Quantity</label>
+                            <input type="number" step="0.2" class="form-control border px-2" id="assetQuantity" name="assetQuantity" placeholder="(i.e. 5)" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="orderDate" class="form-label fw-bold">Order Date</label>
+                            <input type="date" class="form-control border px-2" id="orderDate" name="orderDate" required>
+                        </div>
+                        
+                        <div class="mb-3 col-12">
+                            <label for="orderNote" class="form-label fw-bold">Note/Remarks</label>
+                            <textarea class="form-control border px-2" id="orderNote" name="orderNote" ></textarea>
+                        </div>
+                        <div class="mb-3 col-12 d-flex py-2 align-items-center justify-content-between border-top border-bottom">
+                            <div class="fw-bold">Order Total</div>
+                            <div>₹ <span id="orderTotal">0</span></div>
+                        </div>  
+                        <div class="mb-3 col-12 d-flex gap-2 align-items-center justify-content-between">
+                            <label for="discount" class="form-label fw-bold w-50">Discount</label>
+                            <input type="number" step="0.2" class="form-control border px-2 flex-fill" id="discount" name="discount">
+                        </div>
+                        <div class="mb-3 col-12 py-2 d-flex align-items-center justify-content-between border-top border-bottom">
+                            <div class="fw-bold">Final Amount</div>
+                            <div>₹ <span id="finalAmount">0</span></div>
+                        </div>  
+                        <small class="text-danger" id="orderError"></small>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" id="orderModalCloseBtn">Close</button>
+                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="orderFormSubmitBtn">Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="allotmentModal" tabindex="-1" role="dialog" aria-labelledby="allotmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h5 class="modal-title" id="allotmentModalLabel">Allot Asset</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="allotmentPhase1">
+                        <div class="d-flex gap-2 justify-content-between align-items-center mb-2">
+                            <select class="form-control border px-2" id="allotmentUserType" name="allotmentUserType" required>
+                                <option value="" selected disabled>Select User Type</option>
+                            </select>
+                            <button type="button" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="searchUserBtn">Search User</button>
+                        </div>
+                        <div class="border rounded px-2 text-dark">
+                            <div class="fw-bold">User List</div>
+                            <input type="text" class="form-control" id="searchAllotmentUser" placeholder="Search by User Name / Unique Code">
+                        </div>
+                        <div class="flex-col gap-3 p-2 rounded overflow-y-scroll mh-vh-30" id="allotmentUserList"></div>
+                    </div>
+                    <form id="allotment-form" class="row">
+                        <input class="" type="hidden" name="allotedAssetID" id="allotedAssetID">
+                        <div class="mb-3 col-12">
+                            <label for="allotmentMode" class="form-label fw-bold">Select Mode</label>
+                            <select class="form-control border px-2" id="allotmentMode" name="allotmentMode" required>
+                                <option value="" selected disabled>Select ...</option>
+                                <option value="Used">Asset Used</option>
+                                <option value="Lost">Asset Lost</option>
+                                <option value="Damaged">Asset Damaged</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-12 col-md-6">
+                            <label for="allotedQuantity" class="form-label fw-bold">Allocated Quantity</label>
+                            <input type="number" step="0.2" class="form-control border px-2" id="allotedQuantity" name="allotedQuantity" placeholder="(i.e. 5)" required>
+                        </div>
+                        <div class="mb-3 col-12 col-md-6">
+                            <label for="allotedAt" class="form-label fw-bold">Allocation Date</label>
+                            <input type="date" class="form-control border px-2" id="allotedAt" name="allotedAt" required>
+                        </div>                       
+                        <div class="mb-3 col-12">
+                            <label for="allotmentNotes" class="form-label fw-bold">Note/Remarks</label>
+                            <textarea class="form-control border px-2" id="allotmentNotes" name="allotmentNotes" ></textarea>
+                        </div>
+                        <small class="text-danger" id="allotmentError"></small>
+                    </form>
+                </div>
+                <div class="modal-footer" id="allotmentModalFooter">
+                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" id="allotmentCloseBtn">Close</button>
+                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="allotmentSubmitBtn">Allot Asset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!--   Core JS Files   -->
     <script src="../js/core/popper.min.js"></script>
     <script src="../js/core/bootstrap.min.js"></script>
     <script src="../js/common.js"></script>
     <script type="module">
-        import { getFormOptions, getAssetList, postNewAsset, putAssetDetails, deleteAsset } from '../js/assets/assets.js';
+        import { getFormOptions, getAssetList, postNewAsset, putAssetDetails, deleteAsset,
+            getOrderFormOptions, postNewOrder, getAllotmentUserType, getAllotmentUsers
+         } from '../js/assets/assets.js';
         document.addEventListener('DOMContentLoaded', async function () {
             let assetList = [];
             let filteredList = [];
 
             let categoryList = [];
+            let vendorList = [];
+            let roleList = [];
+            let userList = [];
+            let filteredUserList = [];
             let formMode = 'Add';
 
             await handleInitialFetching();
 
             const searchInput = document.getElementById('searchInput');
             const addUserBtn = document.getElementById('addNewBtn');            
+            
+            // Form Element
             const formModal = document.getElementById('formModal');
             const modalCloseBtn = document.getElementById('addModalCloseBtn');
             const formModalTrigger = new bootstrap.Modal(formModal, { keyboard: false });
 
-            // Form Element
             const formLabelElement = document.getElementById('formLabel');
             const formErrorElement = document.getElementById('formError');
             const formSubmitBtnElem = document.getElementById('formSubmitBtn');
@@ -202,7 +317,72 @@
                 assetCategory: true,
             };
 
+            // Order Form Element
+            const orderModal = document.getElementById('orderModal');
+            const orderModalCloseBtn = document.getElementById('orderModalCloseBtn');
+            const orderModalTrigger = new bootstrap.Modal(orderModal, { keyboard: false });
+
+            const orderFormErrorElement = document.getElementById('orderError');
+            const orderFormSubmitBtnElem = document.getElementById('orderFormSubmitBtn');
+            
+            const orderAssetIDInput = document.getElementById('orderAssetID');
+            const orderDateInput = document.getElementById('orderDate');
+            const assetPriceInput = document.getElementById('assetPrice');
+            const assetQuantityInput = document.getElementById('assetQuantity');
+            const vendorIDInput = document.getElementById('orderVendorID');
+            const orderNoteInput = document.getElementById('orderNote');
+            const orderTotal = document.getElementById('orderTotal');
+            const finalAmount = document.getElementById('finalAmount');
+            const discount = document.getElementById('discount');
+
+            let orderFormValidation = {
+                orderDate: true,
+                assetPrice: true,
+                assetQuantity: true,
+                vendorID: true,
+                orderNote: true,
+                discount: true,
+            };
+
+            // Allotment Form Element
+            const allotmentPhase1 = document.getElementById('allotmentPhase1');
+            const allotmentUserTypeInput = document.getElementById('allotmentUserType');
+            const searchUserBtn = document.getElementById('searchUserBtn');
+            const userSearchInput = document.getElementById('searchAllotmentUser');
+
+
+            const allotmentForm = document.getElementById('allotment-form');
+            const allotmentModal = document.getElementById('allotmentModal');
+            const allotmentModalFooter = document.getElementById('allotmentModalFooter');
+            const allotmentCloseBtn = document.getElementById('allotmentCloseBtn');
+            const allotmentModalTrigger = new bootstrap.Modal(allotmentModal, { keyboard: false });
+
+            const allotmentErrorElement = document.getElementById('allotmentError');
+            const allotmentSubmitBtnElement = document.getElementById('allotmentSubmitBtn');
+
+            const allotedAssetIDInput = document.getElementById('allotedAssetID');
+            const allotmentModeInput = document.getElementById('allotmentMode');
+            const allotedQuantityInput = document.getElementById('allotedQuantity');
+            const allotedAtInput = document.getElementById('allotedAt');
+            const allotmentNotesInput = document.getElementById('allotmentNotes');
+
+            let allotmentFormValidation = {
+                allotmentMode: true,
+                allotedQuantity: true,
+                allotedAt: true,
+            };
+            
+            
+
+
+
+
             modalCloseBtn.addEventListener('click', () => formModalTrigger.hide());
+            orderModalCloseBtn.addEventListener('click', () => orderModalTrigger.hide());
+            allotmentCloseBtn.addEventListener('click', () => allotmentModalTrigger.hide());
+
+
+            // Handle Modal Opening (Initiate Toggle) 
             addUserBtn.addEventListener('click', async () => {
                 formModalTrigger.show();
                 formMode = 'Add';
@@ -210,6 +390,32 @@
                 await handleFormOptions();
                 handleDefaultValueInitialization();
             });
+            
+            async function handleOrder(assetID) {
+                const confirmation = confirm("Are you sure you want to place an Order?");
+                if (confirmation) {
+                    orderAssetIDInput.value = assetID;
+                    orderModalTrigger.show();
+                    await handleOrderFormOptions();
+                    handleDefaultOrderForm(); 
+                }   
+            }
+
+            async function handleAllotment(assetID) {
+                const confirmation = confirm("Are you sure you want to allot this asset?");
+                if (confirmation) {
+                    allotmentForm.style.display = 'none';
+                    allotmentModalFooter.style.display = 'none';
+                    allotmentPhase1.style.display = 'block';
+                    allotedAssetIDInput.value = assetID;
+                    allotmentModalTrigger.show();
+                    await handleAllotmentFormOptions();
+                    
+                    // handleDefaultOrderForm(); 
+                }   
+            }
+
+
 
             async function handleFormOptions() {
                 if(categoryList?.length <= 0){
@@ -217,27 +423,67 @@
                     categoryList = newList;
                 }
 
-                assetCategoryInput.innerHTML = '';
-
-                const defaultOptions = document.createElement('option');
-                defaultOptions.value = '';
-                defaultOptions.textContent = 'Select ...';
-                defaultOptions.disabled = true;
-                defaultOptions.selected = true;
-                assetCategoryInput.appendChild(defaultOptions);
-
-                categoryList?.forEach(listOption => {
-                    const option = document.createElement('option');
-                    option.value = listOption.id;
-                    option.textContent = listOption.name;
-                    assetCategoryInput.appendChild(option);
-                })
+                handleDefaultSelectOption(assetCategoryInput);
+                handleSelectOption(categoryList, assetCategoryInput);
             }
 
+            async function handleOrderFormOptions() {
+                if(vendorList?.length <= 0){
+                    const newList = await getOrderFormOptions();
+                    vendorList = newList;
+                }
+                handleDefaultSelectOption(vendorIDInput);
+                handleSelectOption(vendorList, vendorIDInput, 'id', 'companyName');
+            }
+            
+            async function handleAllotmentFormOptions() {
+                if(roleList?.length <= 0){
+                    const newList = await getAllotmentUserType();
+                    roleList = newList;
+                }
+                handleDefaultSelectOption(allotmentUserTypeInput);
+                handleSelectOption(roleList, allotmentUserTypeInput);
+            }
 
+            searchUserBtn.addEventListener('click', async () => {
+                if(allotmentUserTypeInput.value !== ''){
+                    const newList = await getAllotmentUsers(allotmentUserTypeInput.value);
+                    userList = newList;
+                    filteredUserList = newList; 
+                    handleRenderUserList();
+                }
+            })
+
+
+            // Handle Form Input Validation
             assetNameInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: formErrorElement, inputElement: assetNameInput, submitBtn: formSubmitBtnElem, errorTitle: 'Asset Name', validationObj: createFormValidation, validationKey: 'assetName', inputType: 'Text', isRequired: true }));
             assetCategoryInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: formErrorElement, inputElement: assetCategoryInput, submitBtn: formSubmitBtnElem, errorTitle: 'Asset Category', validationObj: createFormValidation, validationKey: 'assetCategory', inputType: 'Select', isRequired: true }));
            
+            orderDateInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: orderFormErrorElement, inputElement: orderDateInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Order Date', validationObj: orderFormValidation, validationKey: 'orderDate', inputType: 'Date', isRequired: true, validateMinMaxDate: false }));
+            vendorIDInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: orderFormErrorElement, inputElement: vendorIDInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Vendor', validationObj: orderFormValidation, validationKey: 'vendorID', inputType: 'Select', isRequired: true }));
+            orderNoteInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: orderFormErrorElement, inputElement: orderNoteInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Order Note', validationObj: orderFormValidation, validationKey: 'orderNote', inputType: 'Text', isRequired: false }));
+            assetPriceInput.addEventListener('input', (e) => {
+                const priceValue = e.target.value;
+                handleFormValidation({ value: priceValue, errorElement: orderFormErrorElement, inputElement: assetPriceInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Asset Price', validationObj: orderFormValidation, validationKey: 'assetPrice', inputType: 'Number', isRequired: true, minValue: 0 });
+                handleTotalPrice(assetQuantityInput.value, priceValue);
+            });
+            assetQuantityInput.addEventListener('input', (e) => {
+                const qtyValue = e.target.value;
+                handleFormValidation({ value: qtyValue, errorElement: orderFormErrorElement, inputElement: assetQuantityInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Asset Quantity', validationObj: orderFormValidation, validationKey: 'assetQuantity', inputType: 'Number', isRequired: true, minValue: 0 })
+                handleTotalPrice(qtyValue, assetPriceInput.value);
+            });
+            discount.addEventListener('input', (e) => {
+                const discValue = e.target.value;
+                handleDiscount(discValue);
+                handleFormValidation({ value: discValue, errorElement: orderFormErrorElement, inputElement: discount, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Discount', validationObj: orderFormValidation, validationKey: 'discount', inputType: 'Number', isRequired: false, minValue: 0, maxValue: Number(orderTotal.innerHTML) })
+            });
+
+            
+
+
+
+
+            // Form Submisstion
             formSubmitBtnElem.addEventListener('click', async function(e){
                 e.preventDefault();
 
@@ -265,7 +511,28 @@
                 }       
             });
 
-            
+            orderFormSubmitBtnElem.addEventListener('click', async function(e){
+                e.preventDefault();
+
+                const formData = {
+                    assetID: orderAssetIDInput.value,
+                    orderDate: orderDateInput.value,
+                    assetPrice: assetPriceInput.value,
+                    assetQuantity: assetQuantityInput.value,
+                    vendorID: vendorIDInput.value,
+                    orderNote: orderNoteInput.value.trim(),
+                    orderTotal: orderTotal.innerHTML,
+                    finalAmount: finalAmount.value,
+                    discount: discount.innerHTML,
+                }
+                const isSubmitted = await postNewOrder(formData);
+                if(isSubmitted){
+                    alert("Order has placed succesfully!");
+                    formModalTrigger.hide();
+                    window.location.reload();
+                } 
+            });
+
             // Handle Initial Data Fetch 
             async function handleInitialFetching(){
                 const newList = await getAssetList();
@@ -283,7 +550,7 @@
                     row.innerHTML = `
                         <td class='ps-4'>${index + 1}</td>
                         <td><h6 class="mb-0 text-sm text-truncate">${item.name}</h6></td>
-                        <td><h6 class="mb-0 text-sm text-truncate">${item.categoryName}</h6></td>
+                        <td><h6 class="mb-0 text-sm text-center text-truncate">${item.categoryName}</h6></td>
                         <td><h6 class="mb-0 text-sm text-center text-truncate">${item.availableQty} ${item.availableQty > 1 ? 'Pcs' : 'Pc'}</h6></td>
                         <td>
                             <div class='d-flex flex-col text-sm align-items-center justify-content-center'>
@@ -294,8 +561,8 @@
                         <td><h6 class="mb-0 text-sm text-truncate text-center">${item.isAvailable ? 'Active' : 'In-Active'}</h6></td>
                         <td>
                             <div class="d-flex justify-content-center gap-2 align-items-center">
-                                <button class="btn bg-gradient-dark mb-0 py-1 editBtn" data-id="${item.id}">Allot</button>
-                                <button class="btn bg-gradient-dark mb-0 py-1 editBtn" data-id="${item.id}">Order</button>
+                                <button class="btn bg-gradient-dark mb-0 py-1 allotBtn" data-id="${item.id}">Allot</button>
+                                <button class="btn bg-gradient-dark mb-0 py-1 orderBtn" data-id="${item.id}">Order</button>
                                 <button class="btn bg-gradient-dark mb-0 py-1 editBtn" data-id="${item.id}">Edit</button>
                                 <button class="btn bg-gradient-dark mb-0 py-1 deleteBtn" data-id="${item.id}">Delete</button>
                             </div>
@@ -306,10 +573,33 @@
 
                 tableBody.addEventListener('click', (event) => {
                     const itemId = event.target.getAttribute('data-id');
+                    if (event.target.classList.contains('allotBtn')) handleAllotment(itemId);
+                    if (event.target.classList.contains('orderBtn')) handleOrder(itemId);
                     if (event.target.classList.contains('editBtn')) handleProfileEdit(itemId);
                     if (event.target.classList.contains('deleteBtn')) handleDeletion(itemId);
                 });
             }      
+
+                        
+            // Render User List
+            function handleRenderUserList() {
+                const allotmentUserList = document.getElementById('allotmentUserList');
+                allotmentUserList.innerHTML = '';
+
+                filteredUserList?.forEach(user => {
+                    const newUser = `
+                        <div class='d-flex align-items-center justify-content-between'>
+                            <div>
+                                <div>${user.userName}</div>
+                                <small>${user.uniqueID}</small>
+                            </div>
+                            <button type='button' class='btn bg-gradient-dark mb-0 min-width-max-content' onclick="handleUserSelection('${user.userID}')">
+                                Select User
+                            </button>
+                        </div>`;
+                    allotmentUserList.innerHTML += newUser;
+                });
+            }
 
             //  Event Listener for Search Input
             searchInput.addEventListener('input', (event) => {
@@ -317,7 +607,18 @@
                 filteredList = assetList.filter(item => item.name.toLowerCase().includes(searchTerm) || item.categoryName.toLowerCase().includes(searchTerm));
                 handleRederTable();
             });
+            
+            userSearchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+                filteredUserList = userList.filter(item => item.userName.toLowerCase().includes(searchTerm) || item.uniqueID.toLowerCase().includes(searchTerm));
+                handleRenderUserList();
+            });
 
+            function handleUserSelection(userID){
+                alert('Inside of handleUserSelection');
+            }
+
+           
             
             // Handle Deletion Asset
             async function handleDeletion(assetID) {
@@ -332,6 +633,7 @@
             }
 
 
+            // Handle Edit
             async function handleProfileEdit(assetID) {
                 formModalTrigger.show();
                 formMode = 'Edit';
@@ -353,6 +655,7 @@
                 }
             }
 
+            // Handle Default Form Values
             function handleDefaultValueInitialization(){
                 formLabelElement.innerHTML = "Add New Asset";
                 formSubmitBtnElem.innerHTML = "Add New Asset";
@@ -363,6 +666,60 @@
                 assetIsAvailableInput.checked = false;
 
                 handleValidationOBJValues(createFormValidation, true)
+            }
+
+            function handleDefaultOrderForm(){
+                orderDateInput.value = new Date().toISOString().split('T')[0];
+                assetPriceInput.value = 0;
+                assetQuantityInput.value = 0;
+                vendorIDInput.value = '';
+                orderNoteInput.value = 'NA';
+                orderTotal.value = 0;
+                finalAmount.value = 0;
+                discount.value = 0;
+
+                handleValidationOBJValues(orderFormValidation, true)
+            }
+
+            
+            // Create Default Select Option
+            function handleDefaultSelectOption(selectElement){
+                selectElement.innerHTML = '';
+                
+                const defaultOptions = document.createElement('option');
+                defaultOptions.value = '';
+                defaultOptions.textContent = 'Select ...';
+                defaultOptions.disabled = true;
+                defaultOptions.selected = true;
+                selectElement.appendChild(defaultOptions);
+            }
+
+            // Create All Select Option
+            function handleSelectOption(list, selectElement, idSlug = 'id', nameSlug = 'name'){
+                list?.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item[idSlug];
+                    option.textContent = item[nameSlug];
+                    selectElement.appendChild(option);
+                })
+            }
+
+            // Handle Order Form Total Price
+            function handleTotalPrice(qty, price){
+                const tempTotal = Number(qty) * Number(price);
+                orderTotal.innerHTML = tempTotal;
+                handleDiscount(discount.value);
+            }
+
+            // Handle Order Form Discount
+            function handleDiscount(discAmount){
+                const tempOrderValue = Number(orderTotal.innerHTML);
+                if(tempOrderValue < discAmount){
+                    alert('Discount should be smaller than total amount!');
+                    discount.value = 0;
+                    return;
+                }
+                finalAmount.innerHTML = tempOrderValue - discAmount;
             }
 
             // Handle Common Form Validation
@@ -381,6 +738,7 @@
                 maxValue = 1000000,
                 minDate = new Date(),
                 maxDate = new Date(),
+                validateMinMaxDate = true,
                 isArray = false,
                 arrayIndex = 0,
             }) {
@@ -434,7 +792,7 @@
                     minDate.setHours(0, 0, 0, 0);
                     maxDate.setHours(0, 0, 0, 0);
 
-                    if (newDateValue < minDate || newDateValue > maxDate) {
+                    if (validateMinMaxDate && (newDateValue < minDate || newDateValue > maxDate)) {
                         setError(`${errorTitle} must be between ${minDate.toLocaleDateString("en-GB")} and ${maxDate.toLocaleDateString("en-GB")}!`);
                         return;
                     }
