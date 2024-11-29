@@ -6,6 +6,11 @@ const assetTransactionSchema = new mongoose.Schema({
         ref: 'Asset', 
         required: true
     },
+    userID: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', 
+        required: true
+    },
     transactionDate: { type: Date, default: Date.now },
     transactionQuantity: { type: Number, default: 0 },
     updatedBy: {

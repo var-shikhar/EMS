@@ -13,13 +13,16 @@ import categoryController from '../controller/category.js';
 import vendorController from '../controller/vendor.js';
 import assetsController from '../controller/asset.js';
 import commonController from '../controller/common.js'; 
+import orderController from '../controller/order.js';
+import allotmentController from '../controller/allotment.js';
+
 
 router.route('/admin/category-panel').get(isAuth, categoryController.getCategoryList).post(isAuth, categoryController.postCategory).put(isAuth, categoryController.putCategoryDetails);
 router.route('/admin/category-panel/:categoryID').put(isAuth, categoryController.putArchiveCategory).delete(isAuth, categoryController.deleteCategory);
 router.route('/admin/vendor-panel/:vendorID?').get(isAuth, vendorController.getVendorList).post(isAuth, vendorController.postVendor).put(isAuth, vendorController.putVendorDetails).delete(isAuth, vendorController.deleteVendor);
+router.route('/admin/asset-panel/order').post(isAuth, orderController.postOrderViaAsset)
+router.route('/admin/asset-panel/allotment').post(isAuth, allotmentController.postAllotAsset);
 router.route('/admin/asset-panel/:assetID?').get(isAuth, assetsController.getAssetsList).post(isAuth, assetsController.postAssets).put(isAuth, assetsController.putAssetsDetails).delete(isAuth, assetsController.deleteAssets);
-
-
 
 router.route('/admin/list/category-panel').get(isAuth, categoryController.getStCategoryList);
 router.route('/admin/vendor-list').get(isAuth, vendorController.getStVendorList);

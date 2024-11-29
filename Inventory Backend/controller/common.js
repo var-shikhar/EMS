@@ -53,7 +53,6 @@ const getUserList = async (req, res) => {
             return acc;
         }, []) : [];
 
-        console.log(userList)
         return res.status(RouteCode.SUCCESS.statusCode).json(userList);
     } catch (err) {
         console.error(err);

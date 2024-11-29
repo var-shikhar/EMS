@@ -68,7 +68,7 @@ export async function getOrderFormOptions() {
 export async function postNewOrder(formData) {
     try {
         const reqData = JSON.stringify(formData);
-        const { data, isValid, message } = await handlePOSTAXIORequest(`${Config.INVENTORY_BACKEND}/admin/asset-panel`, reqData, 'POST');
+        const { data, isValid, message } = await handlePOSTAXIORequest(`${Config.INVENTORY_BACKEND}/admin/asset-panel/order`, reqData, 'POST');
         if(!isValid) alert(message)
         return isValid;
     } catch (err) {
@@ -96,5 +96,16 @@ export async function getAllotmentUsers(roleID) {
     } catch (err) {
         console.error(err);
         return [];
+    }
+}
+export async function postAllotAsset(formData) {
+    try {
+        const reqData = JSON.stringify(formData);
+        const { data, isValid, message } = await handlePOSTAXIORequest(`${Config.INVENTORY_BACKEND}/admin/asset-panel/allotment`, reqData, 'POST');
+        if(!isValid) alert(message)
+        return isValid;
+    } catch (err) {
+        console.error(err);
+        return false;
     }
 }

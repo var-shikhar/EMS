@@ -241,6 +241,7 @@
                     </div>
                     <form id="allotment-form" class="row">
                         <input class="" type="hidden" name="allotedAssetID" id="allotedAssetID">
+                        <input class="" type="hidden" name="allotedUserID" id="allotedUserID">
                         <div class="mb-3 col-12">
                             <label for="allotmentMode" class="form-label fw-bold">Select Mode</label>
                             <select class="form-control border px-2" id="allotmentMode" name="allotmentMode" required>
@@ -279,9 +280,7 @@
     <script src="../js/core/bootstrap.min.js"></script>
     <script src="../js/common.js"></script>
     <script type="module">
-        import { getFormOptions, getAssetList, postNewAsset, putAssetDetails, deleteAsset,
-            getOrderFormOptions, postNewOrder, getAllotmentUserType, getAllotmentUsers
-         } from '../js/assets/assets.js';
+        import { getFormOptions, getAssetList, postNewAsset, putAssetDetails, deleteAsset, getOrderFormOptions, postNewOrder, getAllotmentUserType, getAllotmentUsers, postAllotAsset } from '../js/assets/assets.js';
         document.addEventListener('DOMContentLoaded', async function () {
             let assetList = [];
             let filteredList = [];
@@ -336,12 +335,12 @@
             const discount = document.getElementById('discount');
 
             let orderFormValidation = {
-                orderDate: true,
+                orderDate: false,
                 assetPrice: true,
                 assetQuantity: true,
                 vendorID: true,
-                orderNote: true,
-                discount: true,
+                orderNote: false,
+                discount: false,
             };
 
             // Allotment Form Element
@@ -361,6 +360,7 @@
             const allotmentSubmitBtnElement = document.getElementById('allotmentSubmitBtn');
 
             const allotedAssetIDInput = document.getElementById('allotedAssetID');
+            const allotedUserInput = document.getElementById('allotedUserID');
             const allotmentModeInput = document.getElementById('allotmentMode');
             const allotedQuantityInput = document.getElementById('allotedQuantity');
             const allotedAtInput = document.getElementById('allotedAt');
@@ -370,12 +370,7 @@
                 allotmentMode: true,
                 allotedQuantity: true,
                 allotedAt: true,
-            };
-            
-            
-
-
-
+            };          
 
             modalCloseBtn.addEventListener('click', () => formModalTrigger.hide());
             orderModalCloseBtn.addEventListener('click', () => orderModalTrigger.hide());
@@ -395,6 +390,8 @@
                 const confirmation = confirm("Are you sure you want to place an Order?");
                 if (confirmation) {
                     orderAssetIDInput.value = assetID;
+                    orderFormSubmitBtnElem.disabled = true;
+
                     orderModalTrigger.show();
                     await handleOrderFormOptions();
                     handleDefaultOrderForm(); 
@@ -410,8 +407,8 @@
                     allotedAssetIDInput.value = assetID;
                     allotmentModalTrigger.show();
                     await handleAllotmentFormOptions();
-                    
-                    // handleDefaultOrderForm(); 
+                    userList = [];
+                    filteredUserList = [];
                 }   
             }
 
@@ -460,8 +457,9 @@
             assetCategoryInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: formErrorElement, inputElement: assetCategoryInput, submitBtn: formSubmitBtnElem, errorTitle: 'Asset Category', validationObj: createFormValidation, validationKey: 'assetCategory', inputType: 'Select', isRequired: true }));
            
             orderDateInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: orderFormErrorElement, inputElement: orderDateInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Order Date', validationObj: orderFormValidation, validationKey: 'orderDate', inputType: 'Date', isRequired: true, validateMinMaxDate: false }));
-            vendorIDInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: orderFormErrorElement, inputElement: vendorIDInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Vendor', validationObj: orderFormValidation, validationKey: 'vendorID', inputType: 'Select', isRequired: true }));
             orderNoteInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: orderFormErrorElement, inputElement: orderNoteInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Order Note', validationObj: orderFormValidation, validationKey: 'orderNote', inputType: 'Text', isRequired: false }));
+
+            vendorIDInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: orderFormErrorElement, inputElement: vendorIDInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Vendor', validationObj: orderFormValidation, validationKey: 'vendorID', inputType: 'Select', isRequired: true }));
             assetPriceInput.addEventListener('input', (e) => {
                 const priceValue = e.target.value;
                 handleFormValidation({ value: priceValue, errorElement: orderFormErrorElement, inputElement: assetPriceInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Asset Price', validationObj: orderFormValidation, validationKey: 'assetPrice', inputType: 'Number', isRequired: true, minValue: 0 });
@@ -478,10 +476,10 @@
                 handleFormValidation({ value: discValue, errorElement: orderFormErrorElement, inputElement: discount, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Discount', validationObj: orderFormValidation, validationKey: 'discount', inputType: 'Number', isRequired: false, minValue: 0, maxValue: Number(orderTotal.innerHTML) })
             });
 
-            
 
-
-
+            allotmentModeInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: allotmentErrorElement, inputElement: allotmentModeInput, submitBtn: allotmentSubmitBtnElement, errorTitle: 'Allocation Mode', validationObj: allotmentFormValidation, validationKey: 'allotmentMode', inputType: 'Select', isRequired: true }));
+            allotedQuantityInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: allotmentErrorElement, inputElement: allotedQuantityInput, submitBtn: allotmentSubmitBtnElement, errorTitle: 'Allocated Quantity', validationObj: allotmentFormValidation, validationKey: 'allotedQuantity', inputType: 'Number', isRequired: true, minValue: 0 }));
+            allotedAtInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: allotmentErrorElement, inputElement: allotedAtInput, submitBtn: allotmentSubmitBtnElement, errorTitle: 'Allocation Date', validationObj: allotmentFormValidation, validationKey: 'allotedAt', inputType: 'Date', isRequired: true, validateMinMaxDate: false }));            
 
             // Form Submisstion
             formSubmitBtnElem.addEventListener('click', async function(e){
@@ -528,7 +526,26 @@
                 const isSubmitted = await postNewOrder(formData);
                 if(isSubmitted){
                     alert("Order has placed succesfully!");
-                    formModalTrigger.hide();
+                    orderModalTrigger.hide();
+                    window.location.reload();
+                } 
+            });
+
+            allotmentSubmitBtnElement.addEventListener('click', async function(e){
+                e.preventDefault();
+
+                const formData = {
+                    assetID: allotedAssetIDInput.value,
+                    allotmentMode: allotmentModeInput.value,
+                    allotmentQuantity: allotedQuantityInput.value,
+                    allotmentDate: allotedAtInput.value,
+                    allotmentNote: allotmentNotesInput.value.trim(),
+                    userID: allotedUserInput.value,
+                }
+                const isSubmitted = await postAllotAsset(formData);
+                if(isSubmitted){
+                    alert("Asset has alloted succesfully!");
+                    allotmentModalTrigger.hide();
                     window.location.reload();
                 } 
             });
@@ -561,7 +578,10 @@
                         <td><h6 class="mb-0 text-sm text-truncate text-center">${item.isAvailable ? 'Active' : 'In-Active'}</h6></td>
                         <td>
                             <div class="d-flex justify-content-center gap-2 align-items-center">
-                                <button class="btn bg-gradient-dark mb-0 py-1 allotBtn" data-id="${item.id}">Allot</button>
+                                ${item.availableQty > 0 
+                                    ? `<button class="btn bg-gradient-dark mb-0 py-1 allotBtn" data-id="${item.id}">Allot</button>`
+                                    : ''
+                                }
                                 <button class="btn bg-gradient-dark mb-0 py-1 orderBtn" data-id="${item.id}">Order</button>
                                 <button class="btn bg-gradient-dark mb-0 py-1 editBtn" data-id="${item.id}">Edit</button>
                                 <button class="btn bg-gradient-dark mb-0 py-1 deleteBtn" data-id="${item.id}">Delete</button>
@@ -579,8 +599,7 @@
                     if (event.target.classList.contains('deleteBtn')) handleDeletion(itemId);
                 });
             }      
-
-                        
+            
             // Render User List
             function handleRenderUserList() {
                 const allotmentUserList = document.getElementById('allotmentUserList');
@@ -589,15 +608,17 @@
                 filteredUserList?.forEach(user => {
                     const newUser = `
                         <div class='d-flex align-items-center justify-content-between'>
-                            <div>
-                                <div>${user.userName}</div>
-                                <small>${user.uniqueID}</small>
-                            </div>
-                            <button type='button' class='btn bg-gradient-dark mb-0 min-width-max-content' onclick="handleUserSelection('${user.userID}')">
+                            <div><div>${user.userName}</div><small>${user.uniqueID}</small></div>
+                            <button type='button' class='btn bg-gradient-dark mb-0 min-width-max-content selectAllotmentUser' data-id="${user.userID}">
                                 Select User
                             </button>
                         </div>`;
                     allotmentUserList.innerHTML += newUser;
+                });
+
+                allotmentUserList.addEventListener('click', (event) => {
+                    const userID = event.target.getAttribute('data-id');
+                    if (event.target.classList.contains('selectAllotmentUser')) handleUserSelection(userID);
                 });
             }
 
@@ -615,7 +636,10 @@
             });
 
             function handleUserSelection(userID){
-                alert('Inside of handleUserSelection');
+                allotedUserInput.value = userID;
+                allotmentForm.style.display = 'flex';
+                allotmentModalFooter.style.display = 'flex';
+                allotmentPhase1.style.display = 'none';
             }
 
            
@@ -669,14 +693,14 @@
             }
 
             function handleDefaultOrderForm(){
-                orderDateInput.value = new Date().toISOString().split('T')[0];
+                orderDateInput.value = '';
                 assetPriceInput.value = 0;
                 assetQuantityInput.value = 0;
                 vendorIDInput.value = '';
                 orderNoteInput.value = 'NA';
                 orderTotal.value = 0;
                 finalAmount.value = 0;
-                discount.value = 0;
+                discount.value = '';
 
                 handleValidationOBJValues(orderFormValidation, true)
             }
