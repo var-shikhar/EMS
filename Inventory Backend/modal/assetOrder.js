@@ -20,6 +20,7 @@ const assetOrderSchema = new mongoose.Schema({
     orderAmount: { type: Number, default: 0 },
     discount: { type: Number, default: 0 },
     finalAmount: { type: Number, default: 0 },
+    paidAmount: { type: Number, default: 0 },
     status: {
         type: String,
         enum: ['Pending', 'Processing', 'Completed'],

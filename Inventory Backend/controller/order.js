@@ -3,9 +3,121 @@ import constant from "../constant/constant.js";
 import Asset from "../modal/asset.js";
 import AssetOrder from "../modal/assetOrder.js";
 import User from "../modal/users.js";
+import AssetOrderTransaction from "../modal/assetOrderTransaction.js";
 
 const { RouteCode } = constant;
 
+const getOrderList = async (req, res) => {
+    const userID = req.user;
+    try {
+        const foundUser = await User.findById(userID);
+        if (!foundUser || foundUser.isBlocked || !foundUser.isActive) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Unauthorized access, Try again!' });
+        }
+
+        const hasPermission = true;
+        if(!hasPermission){
+            return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission Denied!' });
+        }
+
+        const foundOrders = await AssetOrder.find().populate('vendorID').sort({ createdAt: -1});
+        const orderList = foundOrders?.length > 0 ? foundOrders.reduce((acc, cur) => {
+            acc.push({ 
+                id: cur._id, 
+                orderDate: cur.orderDate,
+                vendorCompName: cur.vendorID?.companyName,
+                vendorName: cur.vendorID?.name,
+                orderAmount: cur.finalAmount,
+                paidAmount: cur.paidAmount,
+                status: cur.paymentStatus,
+            })
+            return acc;
+        }, []) : [];
+
+        return res.status(RouteCode.SUCCESS.statusCode).json(orderList);
+    } catch (err) {
+        console.error(err);
+        return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
+    }
+};
+const getOrderDetails = async (req, res) => {
+    const userID = req.user;
+    const { orderID } = req.params;
+    try {
+        const foundUser = await User.findById(userID);
+        if (!foundUser || foundUser.isBlocked || !foundUser.isActive) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Unauthorized access. User is blocked or inactive.' });
+        }
+
+        const hasPermission = true;
+        if (!hasPermission) {
+            return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission Denied!' });
+        }
+
+        const foundOrder = await AssetOrder.findById(orderID).populate('orderedItems.assetID');
+        if (!foundOrder) return res.status(RouteCode.NO_CONTENT.statusCode).json({ message: 'Order not found.' });
+
+        const orderDetail = {
+            id: foundOrder._id,
+            orderDate: foundOrder.orderDate,
+            orderList: foundOrder.orderedItems?.map(item => {
+                if (!item.assetID) return null;
+                return {
+                    assetID: item.assetID._id,
+                    assetName: item.assetID.name,
+                    assetQuantity: item.assetQuantity,
+                    assetPrice: item.assetPrice,
+                };
+            }).filter(Boolean),
+            orderAmount: foundOrder.orderAmount,
+            discount: foundOrder.discount,
+            finalAmount: foundOrder.finalAmount,
+        };
+
+        console.log(orderDetail)
+        return res.status(RouteCode.SUCCESS.statusCode).json(orderDetail);
+
+    } catch (err) {
+        console.error('Error fetching order details:', err.message);
+        return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: 'Internal server error. Please try again later.' });
+    }
+};
+const getTransactionList = async (req, res) => {
+    const userID = req.user;
+    const { orderID } = req.params; 
+    try {
+        const foundUser = await User.findById(userID);
+        if (!foundUser || foundUser.isBlocked || !foundUser.isActive) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Unauthorized access, Try again!' });
+        }
+
+        const hasPermission = true;
+        if(!hasPermission){
+            return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission Denied!' });
+        }
+        
+        const foundOrder = await AssetOrder.findById(orderID);
+        if (!foundOrder) return res.status(RouteCode.NO_CONTENT.statusCode).json({ message: 'Order not found.' });
+
+
+        const foundTransactions = await AssetOrderTransaction.find({ orderID: orderID }).populate('updatedBy').sort({ createdAt: -1});
+        const transactionList = foundTransactions?.length > 0 ? foundTransactions.reduce((acc, cur) => {
+            acc.push({ 
+                id: cur._id, 
+                transactionDate: cur.transactionDate,
+                transactionAmount: cur.transactionAmount,
+                remarks: cur.remarks,
+                addedBy: cur.updatedBy?.firstName + ' ' + cur.updatedBy?.lastName,
+            })
+            return acc;
+        }, []) : [];
+
+        return res.status(RouteCode.SUCCESS.statusCode).json(transactionList);
+    } catch (err) {
+        console.error(err);
+        return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
+    }
+};
 const postOrderViaAsset = async (req, res) => {
     const userID = req.user;
     const { assetID, orderDate, assetPrice, assetQuantity, vendorID, orderNote, orderTotal, finalAmount, discount } = req.body;
@@ -37,7 +149,7 @@ const postOrderViaAsset = async (req, res) => {
             orderNote,
             orderAmount: orderTotal,
             discount,
-            finalAmount,
+            finalAmount: orderTotal,
             orderedItems: [
                 {
                     assetID,
@@ -56,7 +168,8 @@ const postOrderViaAsset = async (req, res) => {
             vendorID,
         };
 
-        foundAsset.totalQuantity = (foundAsset.totalQuantity || 0) + assetQuantity;
+        foundAsset.totalQuantity = (Number(foundAsset.totalQuantity) || 0) + Number(assetQuantity);
+
         if (!Array.isArray(foundAsset.purchaseHistory)) {
             foundAsset.purchaseHistory = [];
         }
@@ -82,8 +195,62 @@ const postOrderViaAsset = async (req, res) => {
         return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: 'Internal server error, please try again later.' });
     }
 };
+const postAddPayment = async (req, res) => {
+    const userID = req.user;
+    const { orderID, paymentAmount, paymentDate, remarks } = req.body;
+
+    try {
+        const foundUser = await User.findById(userID).select('isBlocked isActive');
+        if (!foundUser || foundUser.isBlocked || !foundUser.isActive) {
+            return res.status(RouteCode.UNAUTHORIZED.statusCode).json({ message: 'Unauthorized access, try again!' });
+        }
+
+        const hasPermission = true;
+        if (!hasPermission) {
+            return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission denied!' });
+        }
+
+        const foundOrder = await AssetOrder.findById(orderID);
+        if (!foundOrder) return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Order not found, try again!' });
+
+        const paidAmount = Number(foundOrder.paidAmount) + Number(paymentAmount);
+        const remainingAmount = Number(foundOrder.finalAmount) - Number(foundOrder.paidAmount);
+
+        if (remainingAmount < paymentAmount) return res.status(RouteCode.CONFLICT.statusCode).json({ message: `Amount should be less then ${remainingAmount}.` });
+
+        foundOrder.paidAmount = paidAmount;
+        foundOrder.paymentStatus = paidAmount < foundOrder.finalAmount ? 'Partially Paid' : 'Paid';
+
+        const newTransaction = new AssetOrderTransaction({
+            orderID: orderID,
+            transactionAmount: paymentAmount,
+            transactionDate: new Date(paymentDate),
+            remarks: remarks,
+            updatedBy: userID,
+        });
+
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        try {
+            await newTransaction.save({ session });
+            await foundOrder.save();
+
+            await session.commitTransaction();
+            session.endSession();
+        } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
+            throw error;
+        }
+
+        return res.status(RouteCode.SUCCESS.statusCode).json({ message: 'Payment has been added successfully.' });
+    } catch (err) {
+        console.error('Error Adding Payment:', err);
+        return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: 'Internal server error, please try again later.' });
+    }
+};
 
 
 export default {
-    postOrderViaAsset
+    getOrderList, postOrderViaAsset, getOrderDetails, postAddPayment, getTransactionList
 }
