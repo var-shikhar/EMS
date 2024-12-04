@@ -61,14 +61,7 @@
                     <i class="material-symbols-rounded opacity-5">category</i>
                     <span class="nav-link-text ms-1">Category List</span>
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" href="report.html">
-                    <i class="material-symbols-rounded opacity-5">report</i>
-                    <span class="nav-link-text ms-1">Report</span>
-                </a>
-            </li>
-            
+            </li>            
         </ul>
         </div>
     </aside>
@@ -194,17 +187,68 @@
         </div>
     </div>
 
+    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-lg-60" role="document">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h5 class="modal-title" id="orderModalLabel">Add New Order</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="order-form" class="row">
+                        <div class="mb-3 col-12 col-md-6">
+                            <label for="orderVendorID" class="form-label fw-bold">Select Vendor</label>
+                            <select class="form-control border px-2" id="orderVendorID" name="orderVendorID" required></select>
+                        </div>
+                        <div class="mb-3 col-12 col-md-6">
+                            <label for="orderDate" class="form-label fw-bold">Order Date</label>
+                            <input type="date" class="form-control border px-2" id="orderDate" name="orderDate" required>
+                        </div>
+                        
+                        <div class="col-12 mb-2">
+                            <div class="w-100 my-1 mb-md-2 fw-bold text-dark border-bottom">Ordered Assets</div>
+                            <div class="d-flex flex-column gap-2" id="orderedAssets"></div>
+                        </div>
+                        <div class="mb-3 col-12">
+                            <label for="orderNote" class="form-label fw-bold">Note/Remarks</label>
+                            <textarea class="form-control border px-2" id="orderNote" name="orderNote" ></textarea>
+                        </div>
+                        <div class="mb-3 col-12 d-flex py-2 align-items-center justify-content-between border-top border-bottom">
+                            <div class="fw-bold">Order Total</div>
+                            <div>₹ <span id="orderTotal">0</span></div>
+                        </div>  
+                        <div class="mb-3 col-12 d-flex gap-2 align-items-center justify-content-between">
+                            <label for="orderDiscount" class="form-label fw-bold w-50">Discount</label>
+                            <input type="number" step="0.2" class="form-control border px-2 flex-fill" id="orderDiscount" name="orderDiscount">
+                        </div>
+                        <div class="mb-3 col-12 py-2 d-flex align-items-center justify-content-between border-top border-bottom">
+                            <div class="fw-bold">Final Amount</div>
+                            <div>₹ <span id="finalAmount">0</span></div>
+                        </div>  
+                        <small class="text-danger" id="orderFormError"></small>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn mb-0 delete-btn min-width-max-content" id="orderModalCloseBtn">Close</button>
+                    <button type="submit" class="btn bg-gradient-dark mb-0 delete-btn min-width-max-content" id="orderFormSubmitBtn">Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!--   Core JS Files   -->
     <script src="../js/core/popper.min.js"></script>
     <script src="../js/core/bootstrap.min.js"></script>
     <script src="../js/common.js"></script>
     <script type="module">
-        import { getOrderList, getOrderSummary, getTransactionList, postPayment } from '../js/assets/order.js';
+        import { getOrderList, getOrderSummary, getTransactionList, postPayment, getOrderFormOptions, postOrder } from '../js/assets/order.js';
 
         document.addEventListener('DOMContentLoaded', async function () {
             let orderList = [];
             let filteredList = [];
+            let vendorList = [];
+            let assetList = [];
             let orderSummary = {};
             let maxPayableAmount = 0;
 
@@ -242,27 +286,56 @@
             const transactionModalTrigger = new bootstrap.Modal(transactionModal, { keyboard: false });
                  
 
+            // Order Modal Element
+            const orderModal = document.getElementById('orderModal');
+            const orderModalCloseBtn = document.getElementById('orderModalCloseBtn');
+            const orderModalTrigger = new bootstrap.Modal(orderModal, { keyboard: false });
+            const orderFormErrorElement = document.getElementById('orderFormError');
+            const orderFormSubmitBtnElem = document.getElementById('orderFormSubmitBtn');
+
+            const orderVendorIDInput = document.getElementById('orderVendorID');
+            const orderDateInput = document.getElementById('orderDate');
+            const orderNoteInput = document.getElementById('orderNote');
+            const orderDiscountInput = document.getElementById('orderDiscount');
+            const orderTotalElem = document.getElementById('orderTotal');
+            const orderFinalAmElem = document.getElementById('finalAmount');
+            const orderAssets = document.getElementById('orderedAssets'); 
+
+            let orderAssetList = [{ id: crypto.randomUUID(), assetID: "", assetPrice: "", assetQuantity: "" }];
+            let orderFormValidation = {
+                orderVendorID: true,
+                orderDate: true,
+                orderDiscount: true,
+                assetOBJ: [{
+                    assetID: true,
+                    assetPrice: true,
+                    assetQuantity: true,
+                }]
+            };
+
+            addUserBtn.addEventListener('click', async () => {
+                orderFormSubmitBtnElem.disabled = true;
+                orderModalTrigger.show();
+                await handleOrderFormInit();
+                handleDefaultOrderForm(); 
+            });
+
+            orderModalCloseBtn.addEventListener('click', () => orderModalTrigger.hide());
             detailModalCloseBtn.addEventListener('click', () => detailModalTrigger.hide());
             paymentModalCloseBtn.addEventListener('click', () => paymentModalTrigger.hide());
             transactionModalCloseBtn.addEventListener('click', () => transactionModalTrigger.hide());
 
-
-            async function handleOrder(assetID) {
-                const confirmation = confirm("Are you sure you want to add transaction?");
-                if (confirmation) {
-                    orderAssetIDInput.value = assetID;
-                    orderFormSubmitBtnElem.disabled = true;
-
-                    orderModalTrigger.show();
-                    await handleOrderFormOptions();
-                    handleDefaultOrderForm(); 
-                }   
-            }
-
-
             // Handle Form Input Validation
             paymountAmountInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: paymentFormErrorElement, inputElement: paymountAmountInput, submitBtn: paymentFormSubmitBtnElem, errorTitle: 'Payment Amount', validationObj: paymentFormValidation, validationKey: 'paymountAmount', inputType: 'Number', isRequired: true, minValue: 0, maxValue: maxPayableAmount || 0 }));
             paymentDateInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: paymentFormErrorElement, inputElement: paymentDateInput, submitBtn: paymentFormSubmitBtnElem, errorTitle: 'Payment Amount', validationObj: paymentFormValidation, validationKey: 'paymentDate', inputType: 'Date', isRequired: true, validateMinMaxDate: false }));
+
+            orderVendorIDInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: orderFormErrorElement, inputElement: orderVendorIDInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Vendor', validationObj: orderFormValidation, validationKey: 'orderVendorID', inputType: 'Select', isRequired: true }));
+            orderDateInput.addEventListener('input', (e) => handleFormValidation({ value: e.target.value, errorElement: orderFormErrorElement, inputElement: orderDateInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Order Date', validationObj: orderFormValidation, validationKey: 'orderDate', inputType: 'Date', isRequired: true, validateMinMaxDate: false }));
+            orderDiscountInput.addEventListener('input', (e) => {
+                const discValue = e.target.value;
+                handleDiscount(discValue);
+                handleFormValidation({ value: discValue, errorElement: orderFormErrorElement, inputElement: orderDiscountInput, submitBtn: orderFormSubmitBtnElem, errorTitle: 'Discount', validationObj: orderFormValidation, validationKey: 'orderDiscount', inputType: 'Number', isRequired: false, minValue: 0, maxValue: Number(orderTotalElem.innerHTML) })
+            });
 
             // Form Submisstion
             paymentFormSubmitBtnElem.addEventListener('click', async function(e){
@@ -282,6 +355,30 @@
                 }    
             });
 
+            orderFormSubmitBtnElem.addEventListener('click', async function(e){
+                e.preventDefault();
+
+                const formData = {
+                    orderDate: orderDateInput.value,
+                    vendorID: orderVendorIDInput.value,
+                    orderNote: orderNoteInput.value.trim(),
+                    orderTotal: orderTotalElem.innerHTML,
+                    finalAmount: orderFinalAmElem.innerHTML,
+                    discount: orderDiscountInput.value,
+                    assets: orderAssetList?.map(item => ({
+                        assetID: item.assetID,
+                        assetPrice: item.assetPrice,
+                        assetQuantity: item.assetQuantity,
+                    }))
+                }
+
+                const isSubmitted = await postOrder(formData);
+                if(isSubmitted){
+                    alert("Order has placed succesfully!");
+                    orderModalTrigger.hide();
+                    window.location.reload();
+                } 
+            });
     
             // Handle Initial Data Fetch 
             async function handleInitialFetching(){
@@ -289,6 +386,18 @@
                 orderList = newList;
                 filteredList = newList;
                 handleRederTable()
+            }
+            
+            // Handle Order Data Fetch 
+            async function handleOrderFormInit(){
+                if(vendorList?.length <= 0 || assetList?.length <= 0){
+                    const {assets, vendors} = await getOrderFormOptions();
+                    vendorList = vendors;
+                    assetList = assets;
+                }
+                handleDefaultSelectOption(orderVendorIDInput);
+                handleSelectOption(vendorList, orderVendorIDInput)
+                handleInitialOrderAssetList()
             }
 
             // Function to render the table
@@ -386,6 +495,130 @@
                 `;
             }      
     
+            // Handle Order Asset List 
+            function handleInitialOrderAssetList(){
+                orderAssets.innerHTML = '';
+
+                orderAssetList?.forEach((item, index) => {
+                    const newListItem = `
+                    <div class="p-2 border rounded row mx-auto w-100 position-relative" data-id=${item.id}>
+                        <div class="col-12 col-md-4 mb-3">
+                            <label for=${`assetID${index}`} class="form-label fw-bold">Select Asset</label>
+                            <select class="form-control border px-2" id=${`assetID${index}`} name=${`assetID${index}`} value="${item.assetID}" required></select>
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
+                            <label for=${`assetPrice${index}`} class="form-label fw-bold">Asset Price</label>
+                            <input type="number" step=0.5 class="form-control border px-2" id=${`assetPrice${index}`} value="${item.assetPrice}">
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
+                            <label for=${`assetQuantity${index}`} class="form-label fw-bold">Asset Quantity</label>
+                            <input type="number" step=0.5 class="form-control border px-2" id=${`assetQuantity${index}`} value="${item.assetQuantity}">
+                        </div>
+                        <div class="position-absolute top-0 end-0 me-1 mt-1 w-auto">
+                            ${orderAssetList.length === index + 1
+                                ? `<button type="button" class="btn bg-gradient-dark mb-0 p-1 px-2 delete-btn min-width-max-content addQualiBtn"  id="addQualiBtn${index}">Add</button>` : ''}
+                            ${index > 0
+                                ? `<button type="button" class="btn bg-gradient-dark mb-0 p-1 px-2 delete-btn min-width-max-content removeQualiBtn" id="removeQualiBtn${index}" data-id=${item.id}>Remove</button>` : ''}
+                        </div>
+                    </div>`;
+                    orderAssets.insertAdjacentHTML('beforeend', newListItem);
+                    const indAssetSelectElement = document.getElementById(`assetID${index}`);
+                    handleDefaultSelectOption(indAssetSelectElement);
+                    handleSelectOption(assetList, indAssetSelectElement);
+
+                    indAssetSelectElement.value = item.assetID;
+                });
+
+                // Add event listeners dynamically
+                document.querySelectorAll(".addQualiBtn").forEach((btn) => {
+                    btn.addEventListener("click", handleAddAssetForOrder);
+                });
+
+                document.querySelectorAll(".removeQualiBtn").forEach((btn) => {
+                    btn.addEventListener("click", (e) => {
+                        const id = e.target.dataset.id;
+                        handleRemoveOrderAsset(id);
+                    });
+                });
+
+                // Add input change listeners to save the values dynamically
+                document.querySelectorAll("[id^=assetID], [id^=assetPrice], [id^=assetQuantity]").forEach((input) => {
+                    input.addEventListener("input", (e) => {
+                        const index = parseInt(input.id.match(/\d+/)[0]);
+                        const field = input.id.replace(/\d+/g, "").replace("assetID", "assetID").replace("assetPrice", "assetPrice").replace("assetQuantity", "assetQuantity");
+                        orderAssetList[index][field] = input.value;
+                        handleTotalPrice();
+
+                        // Handle form validation
+                        handleFormValidation({
+                            value: e.target.value,
+                            errorElement: orderFormErrorElement,
+                            inputElement: input,
+                            submitBtn: orderFormSubmitBtnElem,
+                            errorTitle: field.replace(/([A-Z])/g, " $1").trim(),
+                            inputType: field.includes("Date") ? "SKIP" : "Number",
+                            isRequired: true,
+                            validationObj: orderFormValidation,
+                            validationKey: field,
+                            isArray: true,
+                            arrayIndex: index,
+                            minValue: 0,
+                        });
+                    });
+                });
+            }
+
+            // Handle Order Form Total Price
+            function handleTotalPrice() {
+                let tempTotal = orderAssetList.reduce((total, item) => {
+                    const qty = Number(item.assetQuantity) || 0;
+                    const price = Number(item.assetPrice) || 0;
+                    total += qty * price;
+                    return total;
+                }, 0);
+
+                orderTotalElem.innerHTML = tempTotal;
+                handleDiscount(orderDiscountInput.value);
+            }
+
+            // Handle Order Form Discount
+            function handleDiscount(discAmount){
+                const tempOrderValue = Number(orderTotalElem.innerHTML);
+                if(tempOrderValue < discAmount){
+                    alert('Discount should be smaller than total amount!');
+                    orderDiscountInput.value = 0;
+                    return;
+                }
+                orderFinalAmElem.innerHTML = tempOrderValue - discAmount;
+            }
+
+
+            function handleAddAssetForOrder() {
+                // Dynamically Add Validation Object Keys and Order Asset Array
+                orderAssetList.push({ id: crypto.randomUUID(), assetID: "", assetPrice: "", assetQuantity: "" });
+                orderFormValidation.assetOBJ.push({
+                    assetID: true,
+                    assetPrice: true,
+                    assetQuantity: true,
+                });
+                handleInitialOrderAssetList();
+                orderFormSubmitBtnElem.disabled = checkSubmitValidation(orderFormValidation);
+            }
+
+            function handleRemoveOrderAsset(id) {
+                const foundIndex = orderAssetList.findIndex(item => item.id === id);
+
+                if (foundIndex !== -1) {
+                    // Remove Dynamically Added Validation Object Keys and AddExpListArray
+                    orderAssetList.splice(foundIndex, 1);
+                    orderFormValidation.assetOBJ.splice(foundIndex, 1);
+                    handleInitialOrderAssetList();
+                    orderFormSubmitBtnElem.disabled = checkSubmitValidation(orderFormValidation);
+                } else {
+                    alert(`Item with id ${id} not found in the asset list.`);
+                }
+            }
+
             //  Event Listener for Search Input
             searchInput.addEventListener('input', (event) => {
                 const searchTerm = event.target.value.toLowerCase();
@@ -427,6 +660,17 @@
                 paymentRemarksInput.value = '';
 
                 paymentFormSubmitBtnElem.disabled = true;
+            }
+
+            function handleDefaultOrderForm(){
+                orderVendorIDInput.value = '';
+                orderDateInput.value = '';
+                orderNoteInput.value = '';
+                orderDiscountInput.value = '';
+                orderTotalElem.innerHTML = '';
+                orderFinalAmElem.innerHTML = '';
+                orderFormSubmitBtnElem.disabled = true;
+                handleInitialOrderAssetList();
             }
             
             // Create Default Select Option
@@ -479,7 +723,7 @@
                 const setError = (message) => {
                     errorElement.innerHTML = message;
                     inputElement.classList.add("error-form-input");
-                    if (isArray) validationObj.expOBJ[arrayIndex][validationKey] = true;
+                    if (isArray) validationObj.assetOBJ[arrayIndex][validationKey] = true;
                     else validationObj[validationKey] = true;
                     submitBtn.disabled = true;
                 };
@@ -488,7 +732,7 @@
                 const resetError = () => {
                     errorElement.innerHTML = "";
                     inputElement.classList.remove("error-form-input");
-                    if (isArray) validationObj.expOBJ[arrayIndex][validationKey] = false;
+                    if (isArray) validationObj.assetOBJ[arrayIndex][validationKey] = false;
                     else validationObj[validationKey] = false;
 
                     submitBtn.disabled = checkSubmitValidation(validationObj);
@@ -532,12 +776,28 @@
 
             // Function to check the overall validation for the submit button
             function checkSubmitValidation(validationObj) {
-                return Object.values(validationObj).some(value => value);
+                return Object.values(validationObj).some(value => {
+                    if (Array.isArray(value)) return value.some(obj => Object.values(obj).some(innerValue => innerValue));
+                    else if (typeof value === 'object' && value !== null)  return checkSubmitValidation(value);
+                    else return value; 
+                });
             }
 
             // Set Validation Objects Value
             function handleValidationOBJValues(validOBJ, value) {
-                Object.entries(validOBJ).forEach(([key, keyValue]) => validOBJ[key] = value);
+                Object.entries(validOBJ).forEach(([key, keyValue]) => {
+                    if (Array.isArray(keyValue)) {
+                        keyValue.forEach((obj, index) => {
+                            if (typeof obj === 'object' && obj !== null) {
+                                keyValue[index] = Object.fromEntries(Object.keys(obj).map(innerKey => [innerKey, value]));
+                            }
+                        });
+                    } else if (typeof keyValue === 'object' && keyValue !== null) {
+                        handleValidationOBJValues(keyValue, value);
+                    } else {
+                        validOBJ[key] = value;
+                    }
+                });
             }
         });
     </script>

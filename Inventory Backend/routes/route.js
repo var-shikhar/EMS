@@ -24,17 +24,18 @@ router.route('/admin/asset-panel/order').post(isAuth, orderController.postOrderV
 router.route('/admin/asset-panel/allotment').post(isAuth, allotmentController.postAllotAsset);
 router.route('/admin/asset-panel/:assetID?').get(isAuth, assetsController.getAssetsList).post(isAuth, assetsController.postAssets).put(isAuth, assetsController.putAssetsDetails).delete(isAuth, assetsController.deleteAssets);
 
-router.route('/admin/order-panel').get(isAuth, orderController.getOrderList);
+router.route('/admin/order-panel').get(isAuth, orderController.getOrderList).post(isAuth, orderController.postOrder);
 router.route('/admin/order-panel/:orderID').get(isAuth, orderController.getOrderDetails);
 router.route('/admin/transaction-list/:orderID?').get(isAuth, orderController.getTransactionList).post(isAuth, orderController.postAddPayment);
 
 router.route('/admin/list/category-panel').get(isAuth, categoryController.getStCategoryList);
 router.route('/admin/vendor-list').get(isAuth, vendorController.getStVendorList);
+router.route('/admin/asset-list').get(isAuth, assetsController.getStAssetList);
 router.route('/admin/role-list').get(isAuth, commonController.getRoleList);
 router.route('/admin/users-list/:roleID?').get(isAuth, commonController.getUserList);
 
 
-
+router.route('/admin/dashboard-data/inventory-panel').get(isAuth, commonController.getDashboardData);
 
 
 router.use('/', async (req, res) => {

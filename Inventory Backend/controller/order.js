@@ -4,6 +4,7 @@ import Asset from "../modal/asset.js";
 import AssetOrder from "../modal/assetOrder.js";
 import User from "../modal/users.js";
 import AssetOrderTransaction from "../modal/assetOrderTransaction.js";
+import AssetVendor from "../modal/assetVendor.js";
 
 const { RouteCode } = constant;
 
@@ -118,6 +119,93 @@ const getTransactionList = async (req, res) => {
         return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: RouteCode.SERVER_ERROR.message });
     }
 };
+const postOrder = async (req, res) => {
+    const userID = req.user;
+    const { orderDate, vendorID, orderNote, orderTotal, finalAmount, discount, assets } = req.body;
+    try {
+        const foundUser = await User.findById(userID).select('isBlocked isActive');
+        if (!foundUser || foundUser.isBlocked || !foundUser.isActive) {
+            return res.status(RouteCode.UNAUTHORIZED.statusCode).json({ message: 'Unauthorized access, try again!' });
+        }
+
+        const hasPermission = true;
+        if (!hasPermission) {
+            return res.status(RouteCode.FORBIDDEN.statusCode).json({ message: 'Permission denied!' });
+        }
+
+        const foundVendor = await AssetVendor.findById(vendorID);
+        if (!foundVendor) {
+            return res.status(RouteCode.NOT_FOUND.statusCode).json({ message: 'Vendor not found, try again!' });
+        }
+
+        const parsedOrderDate = new Date(orderDate);
+        if (isNaN(parsedOrderDate)) {
+            return res.status(RouteCode.BAD_REQUEST.statusCode).json({ message: 'Invalid order date' });
+        }
+
+        const newOrder = new AssetOrder({
+            orderDate: parsedOrderDate,
+            vendorID,
+            orderNote,
+            orderAmount: orderTotal,
+            discount,
+            finalAmount,
+            status: 'Completed',
+            paymentStatus: 'Pending',
+        });
+
+        // Start session for transaction
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        try {
+            if (assets?.length > 0) {
+                for (const item of assets) {
+                    const foundAsset = await Asset.findById(item.assetID).session(session);
+                    if (foundAsset) {
+                        newOrder.orderedItems.push({
+                            assetID: item.assetID,
+                            assetPrice: item.assetPrice,
+                            assetQuantity: item.assetQuantity,
+                        });
+
+                        const purchaseOBJ = {
+                            date: parsedOrderDate,
+                            price: item.assetPrice,
+                            quantity: item.assetQuantity,
+                            vendorID,
+                        };
+
+                        foundAsset.totalQuantity = (Number(foundAsset.totalQuantity) || 0) + Number(item.assetQuantity);
+
+                        if (!Array.isArray(foundAsset.purchaseHistory)) {
+                            foundAsset.purchaseHistory = [];
+                        }
+
+                        foundAsset.purchaseHistory.push(purchaseOBJ);
+                        foundAsset.latestPurchase = purchaseOBJ;
+
+                        await foundAsset.save({ session });
+                    }
+                }
+            }
+
+            await newOrder.save({ session });
+            await session.commitTransaction();
+            session.endSession();
+            return res.status(RouteCode.SUCCESS.statusCode).json({ message: 'New order has been added successfully.' });
+        } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
+            console.error('Error during transaction:', error);
+            throw error;
+        }
+    } catch (err) {
+        console.error('Error Creating New Order:', err);
+        return res.status(RouteCode.SERVER_ERROR.statusCode).json({ message: 'Internal server error, please try again later.' });
+    }
+};
+
 const postOrderViaAsset = async (req, res) => {
     const userID = req.user;
     const { assetID, orderDate, assetPrice, assetQuantity, vendorID, orderNote, orderTotal, finalAmount, discount } = req.body;
@@ -149,7 +237,7 @@ const postOrderViaAsset = async (req, res) => {
             orderNote,
             orderAmount: orderTotal,
             discount,
-            finalAmount: orderTotal,
+            finalAmount: finalAmount,
             orderedItems: [
                 {
                     assetID,
@@ -252,5 +340,5 @@ const postAddPayment = async (req, res) => {
 
 
 export default {
-    getOrderList, postOrderViaAsset, getOrderDetails, postAddPayment, getTransactionList
+    getOrderList, postOrderViaAsset, getOrderDetails, postAddPayment, getTransactionList, postOrder
 }
